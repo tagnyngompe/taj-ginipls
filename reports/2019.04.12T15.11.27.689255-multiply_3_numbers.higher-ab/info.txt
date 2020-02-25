@@ -1,0 +1,15 @@
+ExpInfoFields.NAME: multiply_3_numbers.higher-ab
+ExpInfoFields.ID: 2019.04.12T15.11.27.689255-multiply_3_numbers.higher-ab
+ExpInfoFields.DIR: ../../reports/2019.04.12T15.11.27.689255-multiply_3_numbers.higher-ab
+ExpInfoFields.ARGS: ['a=4', 'b=5', 'c=3']
+ExpInfoFields.FUNCTION: multiply_3_numbers
+ExpInfoFields.TIMESTAMP: 2019-04-12 15:11:27.689255
+ExpInfoFields.MODULE: __main__
+ExpInfoFields.FILE: /Users/zadmin/Documents/GitHub/taj-ginilogitpls/src/experiments/try-artemis-ml.py
+ExpInfoFields.STATUS: Ran Succesfully
+ExpInfoFields.USER: zadmin
+ExpInfoFields.MAC: B8:E8:56:2A:F5:E8
+ExpInfoFields.PID: 19832
+ExpInfoFields.RUNTIME: 0.014130115509033203
+ExpInfoFields.N_FIGS: 0
+ExpInfoFields.FIGS: []

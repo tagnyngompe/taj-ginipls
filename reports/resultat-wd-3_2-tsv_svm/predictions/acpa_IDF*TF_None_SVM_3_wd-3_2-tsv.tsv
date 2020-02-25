@@ -1,0 +1,6 @@
+docId	y_true	y_pred
+CANAN1101988_acpa-accepte	0	0
+CAROU1501728_acpa-rejette	1	1
+CAFOR1400518_acpa-rejette	1	1
+CANIM1601140_acpa-rejette	1	0
+CAPAR1507851_acpa-rejette	1	1

@@ -1,0 +1,5 @@
+INFO - example_metrics - Running command 'example_metrics'
+INFO - example_metrics - Started run with ID "2"
+counter:  1
+counter:  2
+counter:  3

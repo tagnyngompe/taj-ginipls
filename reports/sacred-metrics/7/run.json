@@ -1,0 +1,63 @@
+{
+  "artifacts": [],
+  "command": "example_metrics",
+  "experiment": {
+    "base_dir": "/Users/zadmin/Documents/GitHub/taj-ginilogitpls/src/experiments",
+    "dependencies": [
+      "numpy==1.16.2",
+      "sacred==0.7.4"
+    ],
+    "mainfile": "sacred-metrics.py",
+    "name": "example_metrics",
+    "repositories": [],
+    "sources": [
+      [
+        "sacred-metrics.py",
+        "_sources/sacred-metrics_d7bd4398115c4548fef721b4e3dfb334.py"
+      ]
+    ]
+  },
+  "heartbeat": "2019-04-12T15:47:51.734266",
+  "host": {
+    "ENV": {},
+    "cpu": "Intel(R) Core(TM) i7-4850HQ CPU @ 2.30GHz",
+    "hostname": "pcbat3-102.cirad.fr",
+    "os": [
+      "Darwin",
+      "Darwin-18.5.0-x86_64-i386-64bit"
+    ],
+    "python_version": "3.7.3"
+  },
+  "meta": {
+    "command": "example_metrics",
+    "options": {
+      "--beat_interval": null,
+      "--capture": null,
+      "--comment": null,
+      "--debug": false,
+      "--enforce_clean": false,
+      "--file_storage": "sacred-metrics",
+      "--force": false,
+      "--help": false,
+      "--loglevel": null,
+      "--mongo_db": "sacred",
+      "--name": null,
+      "--pdb": false,
+      "--print_config": false,
+      "--priority": null,
+      "--queue": false,
+      "--sql": null,
+      "--tiny_db": null,
+      "--unobserved": false,
+      "COMMAND": null,
+      "UPDATE": [],
+      "help": false,
+      "with": false
+    }
+  },
+  "resources": [],
+  "result": null,
+  "start_time": "2019-04-12T15:46:48.252184",
+  "status": "COMPLETED",
+  "stop_time": "2019-04-12T15:47:51.732225"
+}

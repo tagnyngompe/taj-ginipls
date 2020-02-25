@@ -1,0 +1,16 @@
+{
+  "metrics": [
+    {
+      "id": "5cb0b2f29ec2e8f53c95dfef",
+      "name": "training.accuracy"
+    },
+    {
+      "id": "5cb0b2f29ec2e8f53c95dff1",
+      "name": "training.diff"
+    },
+    {
+      "id": "5cb0b2f29ec2e8f53c95dff3",
+      "name": "training.loss"
+    }
+  ]
+}

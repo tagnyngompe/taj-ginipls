@@ -1,0 +1,2 @@
+categoryDmd	vectorization	space-transf	classifier	acc	balanced-acc	err-0	err-1	f1-0	f1-1	f1-macro-avg	nb0	nb1
+acpa	IDF*TF	None	SVM	0.786904761904762	0.6875	0.5	0.125	0.3666666666666667	0.8591269841269841	0.6128968253968254	6	17
