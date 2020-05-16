@@ -2,56 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="taj-ginilogitpls" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/data/data_utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1155">
-              <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
-              <folding>
-                <element signature="e#18#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/experiments/api.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2985">
-              <caret line="206" column="7" selection-start-line="206" selection-start-column="7" selection-end-line="206" selection-end-column="7" />
-              <folding>
-                <element signature="e#84#102#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/experiments/scripts/evaluation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
-              <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
-              <folding>
-                <element signature="e#24#52#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -79,142 +38,16 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/experiments/try-artemis-ml.py" />
-        <option value="$PROJECT_DIR$/src/experiments/try-artemis-ml.py" />
-        <option value="$PROJECT_DIR$/src/experiments/sacred-db.py" />
-        <option value="$PROJECT_DIR$/src/experiments/try-sacred2.py" />
-        <option value="$PROJECT_DIR$/src/experiments/try-sacred.py" />
-        <option value="$PROJECT_DIR$/src/experiments/sacred-config.py" />
-        <option value="$PROJECT_DIR$/src/experiments/sacred-capture.py" />
-        <option value="$PROJECT_DIR$/reports/sacred-capture/_sources/sacred-capture_9e2f923925eb82877052977b6ee80934.py" />
-        <option value="$PROJECT_DIR$/src/experiments/sacred-metrics.py" />
-        <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/src/experiments/learning/sacred-metrics.py" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/unittests/test_ginipls.py" />
-        <option value="$PROJECT_DIR$/src/experiments/scripts/compare.sh" />
-        <option value="$PROJECT_DIR$/src/experiments/classification.py" />
-        <option value="$PROJECT_DIR$/src/__init__.py" />
-        <option value="$PROJECT_DIR$/src/unittests/test_data_utils.py" />
-        <option value="$PROJECT_DIR$/src/unittests/test_test_load_data_fromFile.py" />
-        <option value="$PROJECT_DIR$/data/processed/small_data_with_index.tsv" />
-        <option value="$PROJECT_DIR$/data/processed/small_data_without_index.tsv" />
-        <option value="$PROJECT_DIR$/src/models/ginipls.py" />
-        <option value="$PROJECT_DIR$/src/unittests/test_load_data.py" />
-        <option value="$PROJECT_DIR$/src/experiments/learning/hyperparameters.py" />
-        <option value="$PROJECT_DIR$/data/processed/vectorizations-tfidf.txt" />
-        <option value="$PROJECT_DIR$/src/experiments/scripts/runeval.sh" />
-        <option value="$PROJECT_DIR$/src/data/data_utils.py" />
-        <option value="$PROJECT_DIR$/src/experiments/scripts/evaluation.py" />
-        <option value="$PROJECT_DIR$/src/experiments/api.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="840" />
-    <option name="y" value="27" />
-    <option name="width" value="840" />
-    <option name="height" value="1023" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="processed" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="resultat-wd-3_2-tsv_knn" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="resultat-wd-3_2-tsv_LDA" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="resultat-wd-3_2-tsv_qda" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="learning" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taj-ginilogitpls" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taj-ginilogitpls" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="unittests" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="ProjectId" id="1azdYLKqVFOcemAdtOGpo3jxVkD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -232,19 +65,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Python.hyperparameters">
+  <component name="RunManager" selected="Python.bestconfig">
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -260,6 +81,27 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/experiments/api.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="bestconfig" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="taj-ginilogitpls" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/experiments/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/experiments/scripts/bestconfig.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -287,6 +129,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test_ginipls" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="taj-ginilogitpls" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/unittests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/unittests/test_ginipls.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="try-sacred" type="PythonConfigurationType" factoryName="Python">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -308,20 +171,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_load_data.TestLoad_data" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="taj-ginilogitpls" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/unittests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_load_data.TestLoad_data&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Unittests for test_load_data.TestLoad_data.test_f1_macro_average" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -336,27 +185,13 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_load_data.TestLoad_data.test_load_data" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="taj-ginilogitpls" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/unittests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_load_data.TestLoad_data.test_load_data&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.bestconfig" />
         <item itemvalue="Python.hyperparameters" />
+        <item itemvalue="Python.test_ginipls" />
         <item itemvalue="Python.api" />
         <item itemvalue="Python tests.Unittests for test_load_data.TestLoad_data.test_f1_macro_average" />
-        <item itemvalue="Python tests.Unittests for test_load_data.TestLoad_data" />
-        <item itemvalue="Python tests.Unittests for test_load_data.TestLoad_data.test_load_data" />
       </list>
     </recent_temporary>
   </component>
@@ -414,218 +249,39 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1639" height="1023" extended-state="6" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4905983" visible="true" weight="0.33972773" />
-      <window_info id="Structure" order="1" sideWeight="0.50940174" side_tool="true" weight="0.22403382" />
-      <window_info id="Favorites" order="2" sideWeight="0.50373137" side_tool="true" weight="0.3496377" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49956635" weight="0.32914573" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8822464" visible="true" weight="0.41331658" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49963742" weight="0.32747805" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998747" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.8580918" visible="true" weight="0.264938" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.14190821" side_tool="true" weight="0.2650754" />
-      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.6237923" weight="0.32663316" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4905983" visible="true" weight="0.22403382" />
-      <window_info id="Structure" order="1" sideWeight="0.50940174" side_tool="true" visible="true" weight="0.22403382" />
-      <window_info id="Favorites" order="2" sideWeight="0.50373137" side_tool="true" weight="0.3496377" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49956635" weight="0.32914573" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8822464" visible="true" weight="0.41331658" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49963742" weight="0.32747805" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998747" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.8580918" visible="true" weight="0.2650754" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.14190821" side_tool="true" visible="true" weight="0.2650754" />
-      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.6237923" weight="0.32663316" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout-to-restore>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/site-packages/sklearn/linear_model/logistic.py" />
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/bestconfig.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/clean.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/concatTruePredFasttext.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/compare.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/processed/vectorizations.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/visualization/.gitkeep">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/site-packages/numpy/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/data/external/.gitkeep">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/evalstateofart.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/getopt.py" />
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/site-packages/numpy/core/tests/test_numeric.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/922252709/builtins.py" />
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_None_linearDA_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_None_GaussianNB_2_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/unittests/test_test_load_data_fromFile.py" />
-    <entry file="file://$PROJECT_DIR$/src/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/unittests/test_data_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/processed/small_data_with_index.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_None_OurGiniPLS_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*ATF_None_linearDA_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_None_linearDA_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/reports/resultat-wd-3_2-tsv/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_SVM_3_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_SVM_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_quadraticDA_2_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_quadraticDA_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_Tree_0_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*TP_OurGiniLogitPLS_SVM_2_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/predictions/acpa_CHI2*ATF_OurGiniLogitPLS_quadraticDA_1_wd-3_2-tsv.tsv" />
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/site-packages/sklearn/metrics/classification.py" />
-    <entry file="file://$PROJECT_DIR$/data/processed/doris0_CHI2_ATF-train.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/unittests/test_load_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="56" column="25" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/processed/small_data_without_index.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/unittests/test_ginipls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="5" selection-end-column="10" />
-          <folding>
-            <element signature="e#1#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-997">
-          <caret line="40" column="39" selection-start-line="40" selection-start-column="39" selection-end-line="40" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/models/ginipls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="131" column="9" selection-start-line="131" selection-start-column="9" selection-end-line="131" selection-end-column="9" />
-          <folding>
-            <element signature="e#18#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/processed/vectorizations-tfidf.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="6" selection-start-column="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/runeval.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="174" selection-start-line="14" selection-start-column="174" selection-end-line="14" selection-end-column="174" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv_LDA/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$USER_HOME$/bin/anaconda3/envs/py37/lib/python3.7/site-packages/sklearn/neighbors/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/src/experiments/learning/hyperparameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-215">
-          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
-          <folding>
-            <element signature="e#16#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv_qda/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv_svm/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv_knn/predictions/acpa_IDF*TF_None_KNN_3_wd-3_2-tsv.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv_knn/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$PROJECT_DIR$/reports/resultat-wd-3_2-tsv/metrics_acpa_4_folds_cv_wd-3_2.tsv" />
-    <entry file="file://$PROJECT_DIR$/src/experiments/learning/try-sacred.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/data_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1155">
-          <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
-          <folding>
-            <element signature="e#18#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2985">
-          <caret line="206" column="7" selection-start-line="206" selection-start-column="7" selection-end-line="206" selection-end-column="7" />
-          <folding>
-            <element signature="e#84#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/experiments/scripts/evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
-          <folding>
-            <element signature="e#24#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+  <component name="WindowStateProjectService">
+    <state x="578" y="305" width="424" height="491" key="FileChooserDialogImpl" timestamp="1589234020403">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state x="578" y="305" width="424" height="491" key="FileChooserDialogImpl/0.27.1610.1023@0.27.1610.1023" timestamp="1589234020403" />
+    <state width="1587" height="340" key="GridCell.Tab.0.bottom" timestamp="1589237831063">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state width="1587" height="340" key="GridCell.Tab.0.bottom/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
+    <state width="1587" height="340" key="GridCell.Tab.0.center" timestamp="1589237831062">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state width="1587" height="340" key="GridCell.Tab.0.center/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831062" />
+    <state width="1587" height="340" key="GridCell.Tab.0.left" timestamp="1589237831061">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state width="1587" height="340" key="GridCell.Tab.0.left/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831061" />
+    <state width="1587" height="340" key="GridCell.Tab.0.right" timestamp="1589237831063">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state width="1587" height="340" key="GridCell.Tab.0.right/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
+    <state x="298" y="206" width="1022" height="737" key="SettingsEditor" timestamp="1589234055564">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state x="298" y="206" width="1022" height="737" key="SettingsEditor/0.27.1610.1023@0.27.1610.1023" timestamp="1589234055564" />
+    <state width="805" height="511" key="XDebugger.FullValuePopup" timestamp="1589234509169">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state width="805" height="511" key="XDebugger.FullValuePopup/0.27.1610.1023@0.27.1610.1023" timestamp="1589234509169" />
+    <state x="461" y="366" key="com.intellij.ide.util.TipDialog" timestamp="1587743402925">
+      <screen x="0" y="27" width="1610" height="1023" />
+    </state>
+    <state x="461" y="366" key="com.intellij.ide.util.TipDialog/0.27.1610.1023@0.27.1610.1023" timestamp="1587743402925" />
   </component>
   <component name="masterDetails">
     <states>
