@@ -160,19 +160,19 @@ def balance_data(x_init, y_init, ids_init):
 
 def load_evaluation_data2(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP):
     """"""
-    print("data.utils.load_evaluation_data2: ", y_file_name)
+    #print("data.utils.load_evaluation_data2: ", y_file_name)
     try:
         data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header= (None if indexCol is None else 0))
-        print("data", data)
+        #print("data", data)
         ids = data.index.values.tolist() if indexCol is None else data[indexCol].tolist()
-        print("ids", ids)
+        #print("ids", ids)
         columns = data.columns.values.tolist()
         if yTrueCol is None:
             yTrueCol = columns[0]
         if yPredCol is None:
             yPredCol = columns[1]
         ytrue = data[yTrueCol].values.tolist()
-        print("ytrue: ", ytrue)
+        #print("ytrue: ", ytrue)
         ypred = data[yPredCol].values.tolist()
         return ids, ytrue, ypred
     except Exception as ex:

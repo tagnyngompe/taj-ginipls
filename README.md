@@ -1,83 +1,30 @@
-Gini-Logit-PLS
+Gini-PLS 
 ==============================
 
-A classifier based on a combination of the Gini-PLS and Logit-PLS methods.
+Un algorithme de classification supervisée basée sur la méthode Gini-PLS généralisée
 
-Project Organization
-------------
+Organisation du code source
+---------------------------
 
     ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
     ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
+    ├── data      
+    │   └── processed      <- un petit ensemble de données pour tester que le code fonctionne (src/unittests/test_ginipls.py
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to load, download or generate data
-    │   │   └── make_dataset.py
-    │   │   └── data_utils.py <- main
-    │   │
-    │   ├── experiments    <- Scripts to run experiments
-    │   │   └── taj-sensresultat.py
-    │   │   └── 20NewsGroups.py
-    │   │   └── reuters.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.testrun.org
-
-
---------
-
-## Experiments with artemis-ml
-
-### Setup
-`pip install artemis-ml`
-
-### Storing experiments in the folder *reports*
- 
-You need to modify the `experiment_directory` variable in the configuration file `~/.artemisrc` i.e. `experiment_directory = ../../reports`
- to be compatible with the cookiecutter-data-science project structure
- 
- 
-## Experiments with sacred
-
-### Setup
-
-*  `(py37)> pip install sacred`
-*  `(py37)> npm install -g omniboard`
-*  `> omniboard -m localhost:27017:sacred`
- 
- 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+    │                         generated with `pip freeze > requirements.txt`so src can be imported
+    └── src                <- Source code for use in this project.
+        ├── __init__.py    <- Makes src a Python module
+        │
+        ├── data           <- Scripts to load, download or generate data
+        │   └── make_dataset.py
+        │   └── data_utils.py <- main
+        │
+        ├── experiments    <- Scripts to run experiments
+        │   └── learning   <- fonction de sélection des hyperparamètres (le nu du Gini-PLS)
+        │   └── api.py et classification.py     <-  appel des fonctions d'entrainement ou test des classifieurs
+        │   └── scripts > evaluation.py  <- SCRIPT PRINCIPAL D'EVALUATION
+        │
+        └── models         <- Scripts to train models and then use trained models to make
+            ├── ginipls.py <- Implémentation des variantes du Gini PLS
+        
+   

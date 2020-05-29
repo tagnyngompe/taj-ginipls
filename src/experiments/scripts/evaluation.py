@@ -5,17 +5,17 @@ from os.path import dirname
 sys.path.append(dirname(__file__)+"/../..")
 
 sys.path.insert(0, '../../data')
-sys.path.insert(1, '..')
 sys.path.insert(1, '../../models')
+sys.path.insert(2, '..')
 
 import api, classification, data_utils
 
-# in the working directory: python ~/git/cassandra-python/taj/scripts/pls/evaluation.py -c styx -i styx_lemma_4_folds_cv/3gram_avec_context-tsv -o resultats-litige-motifs-dispositif -k 4 -b False -v vectorizations.txt
-# python ~/git/cassandra-python/taj/scripts/pls/evaluation.py -c doris -i doris_lemma_4_folds_cv/3gram_avec_context-tsv -o resultats-litige-motifs-dispositif -k 4 -b False -v vectorizations.txt
+# python evaluation.py -c acpa -o "@sens-resultat" -i "@id" -m ~/Documents/taj/wsp/chap4/data/cv-litige_motifs_dispositif/acpa_lemma_4_folds_cv/wd-3_2-tsv -r ../../../reports/resultats-litige-motifs-dispositif -k 4 -b False -v ~/Documents/taj/wsp/chap4/data/vectorizations.txt
 
 def main(argv):
     usage = """evaluation.py -c <categoryDmd> -o <output_colname> -d <instance_colname> -m <matrixFolderPath> -r <resultFolderPath> -k <nbFolds> -b <balance traindata?> -v <vectorizationsFilePath>\n
     e.g. python evaluation.py -c styx -o "@category" -i "@id" -m styx_lemma_4_folds_cv/3gram_avec_context-tsv -r resultat30052018 -k 4 -b False -v vectorizations.txt"""
+    print(argv)
     if len(argv) == 0:
         print(usage)
         sys.exit(1)
@@ -54,7 +54,7 @@ def main(argv):
             instance_colname = arg
 
     print(os.getcwd())
-    classifiers = ['Tree']#'linearDA', 'quadraticDA','GaussianNB','KNN','SVM', 'Tree', 'OurStandardPLS', 'OurGiniPLS', 'OurLogitPLS', 'OurGiniLogitPLS', 'SklearnPLSCanonical']
+    classifiers = ['OurGiniPLS']#'linearDA', 'quadraticDA','GaussianNB','KNN','SVM', 'Tree', 'OurStandardPLS', 'OurGiniPLS', 'OurLogitPLS', 'OurGiniLogitPLS', 'SklearnPLSCanonical']
     space_transformations = [None]# None, 'OurGiniLogitPLS',  'lsa', 'linearDA', 'quadraticDA', ]
     localTsvDir = os.path.basename(matrixFolderPath)
     if not os.path.exists(resultFolderPath):
@@ -71,6 +71,7 @@ def main(argv):
     t1 = time.time()
     with open(vectorizationsFilePath, 'r') as vf:
         for vectorization in vf:
+            print(vectorization)
             vectorization = vectorization.strip()
             if len(vectorization) == 0:
                 continue

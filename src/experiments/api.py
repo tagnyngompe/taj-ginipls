@@ -370,7 +370,7 @@ def evaluation(y_true, y_pred):
     b_acc = balanced_accuracy_score(y_true, y_pred)
     errors = [1 - x for x in recall_score(y_true=y_true, y_pred=y_pred, average=None)]
     categories = list(set(y_true))
-    print("api.evaluation.categories", categories)
+    #print("api.evaluation.categories", categories)
     f1_scores = [x for x in f1_score(y_true=y_true, y_pred=y_pred, labels=categories, average=None)]
     # if len(errors) == 1:
     #     print("errors", errors)
