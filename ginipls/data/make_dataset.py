@@ -4,9 +4,9 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import pandas as pd
-from src.features.build_features import TF_IDF, TF_CHI2
-from src.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
-from src.features.build_features import InputError
+from ginipls.features.build_features import TF_IDF, TF_CHI2
+from ginipls.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
+from ginipls.features.build_features import InputError
 import os
 import pickle
 

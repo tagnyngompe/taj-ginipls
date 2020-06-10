@@ -31,7 +31,7 @@ class PLS_VARIANT(Enum):
 
 class PLS():
   def __init__(self, pls_type=PLS_VARIANT.STANDARD, n_components=10,
-                 nu=2, centering_reduce=True, centering_reduce_rank=False, 
+                 nu=2, centering_reduce=True, centering_reduce_rank=True, 
                  use_VIP=False):
     """
     Parameters:
@@ -443,9 +443,9 @@ class PLS():
     Gini-PLS/PLS training
     
     Parameters:
-    x: np.matrix
+    x: np.matrix or list(), not ndarray
         matrice des features
-    y: np.matrix
+    y: np.matrix or list(), not ndarray
         matrice colonne de la var dépendantes
     """
     #print("fiting...")            
@@ -567,9 +567,9 @@ class PLS():
         Tj1 = self.T[:,0:(j+1)]
         Tj1p = np.transpose(Tj1)          
         for i in range(k) :
-          print('Tj1p', Tj1p.shape)
-          print('Tj1', Tj1.shape)
-          print('self.X_train[:,i]', self.X_train[:,i].shape)
+          # print('Tj1p', Tj1p.shape)
+          # print('Tj1', Tj1.shape)
+          # print('self.X_train[:,i]', self.X_train[:,i].shape)
           BETA = np.dot(np.linalg.inv(np.dot(Tj1p,Tj1)), np.dot(Tj1p,self.X_train[:,i]))
           RES[:,i] = X_test[:,i] - TT[:,0:(j+1)]*BETA
         TT[:,(j+1)] = RES * self.w[:,(j+1)]        
@@ -613,7 +613,10 @@ class PLS():
   def score(self, X, y):
     """ predict the labels ypred for X and score the prediction with regard to the expected labels y 
     """
+    assert set(y) == {0,1}
     ypred = self.predict(X)
+    #print("ypred", ypred)
+    #print("y", y)
     return f1_score(y, ypred)
 
 if __name__ == "__main__":

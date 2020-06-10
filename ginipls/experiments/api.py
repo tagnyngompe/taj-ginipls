@@ -9,11 +9,8 @@ import random
 from time import time
 import sys
 
-sys.path.insert(0, '../data')
-sys.path.insert(1, '../models')
 
-import ginipls
-from ginipls import PLS_VARIANT
+from ginipls.models.ginipls import PLS_VARIANT
 
 class PLSCanonical(PLSCanonical):
     def __init__(self, n_components=2, scale=True, algorithm="nipals",

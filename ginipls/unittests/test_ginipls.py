@@ -2,15 +2,9 @@
 import os.path as op
 import numpy as np
 
-# to be able to import from other directories
-import sys
-sys.path.insert(0, '../models')
-sys.path.insert(1, '../data')
-sys.path.insert(1, '../experiments')
-
-from data_utils import load_data # even if PyCharm marks it as unresolved, it works, so don't mind!
-from ginipls import PLS, PLS_VARIANT
-from api import evaluation
+from ginipls.data.data_utils import load_data 
+from ginipls.models.ginipls import PLS, PLS_VARIANT
+from ginipls.experiments.api import evaluation
 
 
    # [[2.0, 0.0, 7.0, 4], [3.0, 1.0, 5.0, 4], [0.0, 4.0, 5.0, 4], [4.0, 0.0, 7.0, 4], [4.0, 1.0, 8.0, 4], [1.5, 1.3, 1.1, 4]]
@@ -20,7 +14,7 @@ def petit_test(X_train=[[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .9
             X_test=[[.8, 1.0, 0.0, 3, 0, 5], [1.3, 1.4, 1.7, 5, 8, 4], [4.0, 1.2, 5.5, 3, .3, .9], [3.3, 1.0, 1.4, 6, 11, 15], [1.5, 1.3, 1.1, 0, 14.5, 14.2]],
             y_test=[1, 0, 0, 1, 1],
             ids_test=[1, 2, 3, 4, 5],
-               n_components=2, nu=1.7, use_VIP=False):
+               n_components=2, nu=1.4, use_VIP=False):
     # TODO : turn this into a unit test
 
     for t in [PLS_VARIANT.STANDARD, PLS_VARIANT.GINI, PLS_VARIANT.LOGIT_GINI, PLS_VARIANT.LOGIT]:
@@ -34,21 +28,19 @@ def petit_test(X_train=[[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .9
         print('%s (accuracy, err_0, err_1): %s' % (str(t), metrics_values))
 
 if __name__ == "__main__":
-    print("ginipls.main()")
-#    X_train =  [[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .97], [0.0, 4.0, 5.0, 4, .1235, 2.58], [4.0, 0.0, 7.0, 4, 10, 4.78], [4.0, 1.0, 8.0, 4, 1, 5], [1.5, 1.3, 1.1, 4, 7, 6]]
-#    #X_train =  [[.8, 1.0, 0.0], [1.3, 1.4, 1.7], [4.0, 1.2, 5.5], [3.3, 1.0, 1.4], [1.5, 1.3, 1.1]]
-#    y_train= [0, 0, 0, 1, 1, 1]
-#    X_test =  [[.8, 1.0, 0.0, 3], [1.3, 1.4, 1.7, 5], [4.0, 1.2, 5.5, 3], [3.3, 1.0, 1.4, 6], [1.5, 1.3, 1.1, 0]]
-#    y_test= [1, 0, 0, 1, 1]
+  print("ginipls.main()")
+  X_train =  [[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .97], [0.0, 4.0, 5.0, 4, .1235, 2.58], [4.0, 0.0, 7.0, 4, 10, 4.78], [4.0, 1.0, 8.0, 4, 1, 5], [1.5, 1.3, 1.1, 4, 7, 6]]
+  #X_train =  [[.8, 1.0, 0.0], [1.3, 1.4, 1.7], [4.0, 1.2, 5.5], [3.3, 1.0, 1.4], [1.5, 1.3, 1.1]]
+  y_train= [0, 0, 0, 1, 1, 1]
+  X_test =  [[.8, 1.0, 0.0, 3], [1.3, 1.4, 1.7, 5], [4.0, 1.2, 5.5, 3], [3.3, 1.0, 1.4, 6], [1.5, 1.3, 1.1, 0]]
+  y_test= [1, 0, 0, 1, 1]
 
-    data_path = '../../data/processed'
-    # data path
-    trainfilename = op.join(data_path, 'doris0_CHI2_ATF-train.tsv')
-    testfilename = op.join(data_path, 'doris0_CHI2_ATF-test.tsv')
-    print('trainfilename',trainfilename)
-    print('testfilename',testfilename)
-    # loading the datasets
-    X_train, y_train, h, ids_train = load_data(data=trainfilename, output_col='category')
-    X_test, y_test, h, ids_test = load_data(data=testfilename, output_col='category')
-    petit_test(X_train, y_train, ids_train, X_test, y_test, ids_test, n_components=2, nu=1.7, use_VIP=False)
-    #petit_test()
+  # data_path = '../../data/processed'
+  # trainfilename = op.join(data_path, 'doris0_CHI2_ATF-train.tsv')
+  # testfilename = op.join(data_path, 'doris0_CHI2_ATF-test.tsv')
+  # print('trainfilename',trainfilename)
+  # print('testfilename',testfilename)  
+  # X_train, y_train, h, ids_train = load_data(data=trainfilename, output_col='category')
+  # X_test, y_test, h, ids_test = load_data(data=testfilename, output_col='category')
+  # petit_test(X_train, y_train, ids_train, X_test, y_test, ids_test, n_components=2, nu=1.7, use_VIP=False)
+  petit_test()
