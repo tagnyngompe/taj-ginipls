@@ -2,9 +2,6 @@ import logging
 import os
 
 
-# log file
-LOG_FILENAME = "taj-ginipls.log"
-
 def init_logging(log_file=None, append=False, console_loglevel=logging.INFO):
     """Set up logging to file and console."""
     file_format = "%(asctime)s:%(module)s.%(funcName)s():line %(lineno)s:%(levelname)-8s: %(message)-8s : (%(pathname)s)"
@@ -30,9 +27,6 @@ def init_logging(log_file=None, append=False, console_loglevel=logging.INFO):
     logging.getLogger('').addHandler(console)
     return logging.getLogger(__name__) 
 
-GLOBAL_LOGGER = init_logging(log_file=LOG_FILENAME, append=False)
-
-
-if __name__ == '__main__':
-  logger.info("ICI")
-  logger.debug("ICI debug")
+# log file
+LOG_FILENAME = "taj-ginipls.log"
+GLOBAL_LOGGER = init_logging(log_file=LOG_FILENAME, append=True)
