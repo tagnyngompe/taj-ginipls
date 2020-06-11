@@ -71,7 +71,8 @@ def load_data(data, output_col=0, index_col=None,
         cols_to_drop += [index_col]
         instances_names = data[index_col].values.tolist()
     else:
-        instances_names = data.index.values.tolist()
+        #instances_names = data.index.values.tolist()
+        instances_names = None
     dep_var_values = None
     if not output_col is None:
         dep_var_values = data[output_col].tolist()
@@ -97,23 +98,31 @@ def load_data(data, output_col=0, index_col=None,
     # logger.debug('ids=%s' % str(instances_names))
     return indep_var_matrix, dep_var_values, indep_var_names, instances_names
 
-def save_data(row_index, values, y_file_name, col_sep=DEFAULT_COL_SEP):
+def save_y_in_file(row_index, y, y_file_name, col_sep=DEFAULT_COL_SEP):
     """
-    Save one column of values in a file
+    Save one column of y in a file
     """
     with open(y_file_name, 'w') as f:
-        for id, y in zip(row_index, values):
-            f.write(str(id)+col_sep+str(y)+"\n")
+        if row_index is None:
+            for y in y:
+                f.write(''.join([str(y),"\n"]))
+        else:
+            for id, y in zip(row_index, y):
+                f.write(''.join([str(id),col_sep,str(y),"\n"]))
 
-def save_data2(row_index, y_trues, y_preds, y_file_name, col_sep=DEFAULT_COL_SEP):
+def save_ytrue_and_ypred_in_file(row_index, y_trues, y_preds, y_file_name, col_sep=DEFAULT_COL_SEP):
     """
     Save two columns of values in a file (expected - predicted)
     """
     with open(y_file_name, 'w') as f:
-        f.write("docId" + col_sep + "y_true" + col_sep + "y_pred" + "\n")
-        for id, y_true, y_pred in zip(row_index, y_trues, y_preds):
-            f.write(str(id)+col_sep+str(y_true)+col_sep+str(y_pred)+"\n")
-        f.close()
+        if row_index is None:
+            f.write("".join(["y_true",col_sep,"y_pred","\n"]))
+            for y_true, y_pred in zip(y_trues, y_preds):
+                f.write("".join([str(y_true),col_sep,str(y_pred),"\n"]))
+        else:
+            f.write("".join(["docId", col_sep, "y_true",col_sep,"y_pred","\n"]))
+            for id, y_true, y_pred in zip(row_index, y_trues, y_preds):
+                f.write("".join([str(id),col_sep,str(y_true),col_sep,str(y_pred),"\n"]))
 
 def load_evaluation_data(y_file_name, y_col=1, col_sep=DEFAULT_COL_SEP, header_row_num=None):
     """
@@ -127,21 +136,23 @@ def load_evaluation_data(y_file_name, y_col=1, col_sep=DEFAULT_COL_SEP, header_r
     data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
     return data[y_col].tolist()
 
-def load_evaluation_data2(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP):
+def load_ytrue_ypred_file(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP):
     """"""
     #print("data.utils.load_evaluation_data2: ", y_file_name)
     try:
-        data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header= (None if indexCol is None else 0))
-        #print("data", data)
-        ids = data.index.values.tolist() if indexCol is None else data[indexCol].tolist()
+        if yTrueCol is None or yPredCol is None:
+            header_row_num = None
+        else:
+            header_row_num = 'infer'
+        data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
+        logger.debug("data=%s" % str(data))
+        ids = data.index.values.tolist() if indexCol is None else None #data[indexCol].tolist()
         #print("ids", ids)
         columns = data.columns.values.tolist()
-        if yTrueCol is None:
+        if yTrueCol is None or yPredCol is None:
             yTrueCol = columns[0]
-        if yPredCol is None:
             yPredCol = columns[1]
         ytrue = data[yTrueCol].values.tolist()
-        #print("ytrue: ", ytrue)
         ypred = data[yPredCol].values.tolist()
         return ids, ytrue, ypred
     except Exception as ex:

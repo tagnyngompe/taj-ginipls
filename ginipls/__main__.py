@@ -3,11 +3,13 @@ import os
 import pickle
 import datetime
 from sklearn.metrics import f1_score, accuracy_score
-from ginipls.data.data_utils import load_data 
+from ginipls.data.data_utils import load_data, save_y_in_file, save_ytrue_and_ypred_in_file, load_ytrue_ypred_file
 from ginipls.models.ginipls import PLS, PLS_VARIANT
 from ginipls.models.hyperparameters import select_pls_hyperparameters_with_cross_val
 from ginipls.config import GLOBAL_LOGGER
 logger = GLOBAL_LOGGER
+
+default_prediction_dir = 'data/predictions'
 
 def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfolds, nu_range, n_components_range, only_the_first_fold):
   """"""
@@ -21,14 +23,14 @@ def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfol
 
 
 @click.group()
-def train():
+def train(help = "Group of commands training models on labeled data"):
     pass
 
 @train.command("on-vectors", help="train on a csv file with vectors as rows and attributes as columns")
 @click.argument('trainfilename', type=click.Path(exists=True))
 @click.argument('classifierfilename', type=click.Path(), required=False)
 @click.option('--label_col', type=str, default='@label', help='labels column name', show_default=True)
-@click.option('--index_col', type=str, default='@id', help='texts ids column name', show_default=True)
+@click.option('--index_col', type=str, default=None, help='texts ids column name[optional]', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 @click.option('--pls_type', type=click.Choice(PLS_VARIANT.__members__), callback=lambda c, p, v: getattr(PLS_VARIANT, v) if v else None, default=PLS_VARIANT.STANDARD, help='variant of PLS (%s)' % (' '.join('PLS_VARIANT.' + c.name for c in PLS_VARIANT)), show_default=True)
 @click.option('--nu_range', type=list, default=[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9], help='range of the hyperparameter nu of the gini_pls method', show_default=True)
@@ -53,7 +55,7 @@ def train_on_texts():
 
 #cli = click.CommandCollection(sources=[train])
 
-@click.group()
+@click.group(help = "Group of commands applying trained model on new data")
 def apply():
     pass
     
@@ -62,7 +64,7 @@ def apply():
 @click.argument('classifierfilename', type=click.Path(exists=True))
 @click.argument('outputfilename', type=click.Path(), required=False)
 @click.option('--label_col', type=str, default=None, help='labels column name [optional]', show_default=True, required=False)
-@click.option('--index_col', type=str, default='@id', help='texts ids column name', show_default=True)
+@click.option('--index_col', type=str, default=None, help='texts ids column name[optional]', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 def apply_on_vectors(vectorsfilename, classifierfilename, outputfilename, label_col, index_col, col_sep):
     """python -m ginipls apply on-vectors --label_col=category --index_col=@id data\processed\doris0_CHI2_ATF-test.tsv models\2020-06-11_14-58-50_doris0_CHI2_ATF-train_GINIPLS.model"""
@@ -74,18 +76,22 @@ def apply_on_vectors(vectorsfilename, classifierfilename, outputfilename, label_
     y_pred = clf.predict(X_test)
     if outputfilename is None:
         # build a name for the model_file
-        input_basename = os.path.basename(vectorsfilename).split('.')[0]
-        outputfilename = os.path.join("reports","_".join([datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),input_basename, str(pls_type.name)+"PLS.out.tsv"]))
+        vector_fbasename = os.path.basename(vectorsfilename).split('.')[0]
+        model_fbasename = os.path.basename(classifierfilename).split('.')[0]
+        if not os.path.isdir(default_prediction_dir):
+            os.mkdir(default_prediction_dir)
+        outputfilename = os.path.join(default_prediction_dir,"_".join([model_fbasename, 'applied-on', vector_fbasename, "out.tsv"]))
     if label_col: # save y_pred and y_true
-        outputfilename
+        save_ytrue_and_ypred_in_file(row_index=ids_test, y_trues=y_test, y_preds=y_pred, y_file_name=outputfilename, col_sep=col_sep)
     else:
-        outputfilename
+        save_y_in_file(row_index=ids_test, y=y_pred, y_file_name=outputfilename, col_sep=col_sep)
+    logger.info("Predicted labels are saved at %s" % (outputfilename))
 
 @apply.command('on-text', help="vectorize training texts then apply a trained pls on their vectors")
 def on_texts():
     click.echo('This is the on-texts subcommand of the train command [UNAVAILABLE]')
 
-@click.group()
+@click.group(help = "Group of commands applying trained model on new data")
 def test():
     pass
     
@@ -97,14 +103,47 @@ def test_on_vectors(trainfilename, classifierfilename, label_col, index_col, col
     # test_f1_score = f1_score(y_test, y_pred, labels=[0,1], average='macro')
     # logger.info("test f1_score = %.3f" % (test_f1_score))
     pass
-
-@click.group()
-def cli():
+    
+@click.group(help = "Group of commands evaluating ")
+def evaluate():
     pass
 
+@evaluate.command('f1', help="estimate the F1-score on two Y vectors stored in predfilename (ytrue, ypred)")
+@click.argument('predfilename', type=click.Path(exists=True))
+@click.option('--index_col', type=str, default=None, help='texts ids column name [optional]', show_default=True, required=False)
+@click.option('--ytrue_col', type=str, default=None, help='column of expected output', show_default=True, required=False)
+@click.option('--ypred_col', type=str, default=None, help='column of predicted output', show_default=True, required=False)
+@click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
+def f1_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
+    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
+    test_f1_score = f1_score(y_true, y_pred, labels=[0,1], average='macro')
+    if logger.disabled:
+        print(test_f1_score)
+    logger.info("test f1_score = %.3f" % (test_f1_score))
+
+@evaluate.command('accuracy', help="apply a trained pls on vectors")
+@click.argument('predfilename', type=click.Path(exists=True))
+@click.option('--index_col', type=str, default=None, help='texts ids column name [optional]', show_default=True, required=False)
+@click.option('--ytrue_col', type=str, default=None, help='column of expected output', show_default=True, required=False)
+@click.option('--ypred_col', type=str, default=None, help='column of predicted output', show_default=True, required=False)
+@click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
+def accuracy_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
+    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
+    test_acc_score = accuracy_score(y_true, y_pred)
+    if logger.disabled:
+        print(test_acc_score)
+    logger.info("test accuracy_score = %.3f" % (test_acc_score))
+
+@click.group(help = "This is the command line interface of the Gini-PLS classification project")
+@click.option('--logging/--no-logging', default=True, help='column delimiter', show_default=True)
+def cli(logging):
+    logger.disabled = (not logging)
+
 cli.add_command(apply)
+cli.add_command(evaluate)
 cli.add_command(test)
 cli.add_command(train)
 
 if __name__ == '__main__':
+# python -m ginipls --no-logging evaluate f1 data\predictions\2020-06-11_14-58-50_doris0_CHI2_ATF-train_GINIPLS_applied-on_doris0_CHI2_ATF-test_out.tsv
     cli()
