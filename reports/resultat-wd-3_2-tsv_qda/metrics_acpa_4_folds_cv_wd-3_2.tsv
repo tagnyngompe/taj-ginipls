@@ -1,2 +1,0 @@
-categoryDmd	vectorization	space-transf	classifier	acc	balanced-acc	err-0	err-1	f1-0	f1-1	f1-macro-avg	nb0	nb1
-acpa	IDF*TF	None	quadraticDA	0.6095238095238096	0.6625	0.25	0.425	0.43333333333333335	0.6627705627705628	0.548051948051948	6	17
