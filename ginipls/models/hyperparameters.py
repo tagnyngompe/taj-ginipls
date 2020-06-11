@@ -10,26 +10,32 @@ logger = GLOBAL_LOGGER
 
 
 ## DIY : sklearn.kfold + for(nu_range) + fit + score
-def select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds, best_expectable_score=1.):
+def select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds, best_expectable_score=1., only_the_first_fold=False):
   """"""
   # TO SEE THE FOLDS SCORES : grep -nr '\[nu=1.700, n_comp_=5\].*score' taj-ginipls.log
   logger.debug('nu_range = %s'% str(nu_range))
   logger.debug('n_components_range =%s'% str(n_components_range))
   X = np.asarray(X) #pour kf.split(X)
   y = np.asarray(y) 
-  n_folds = min(n_folds, len(X))
-  logger.info("Strating a %d folds Cross-validation" % n_folds)
+  n_folds = min(n_folds, len(X))  
   kf = KFold(n_splits=n_folds, shuffle=True)
   kf.get_n_splits(X)
   best_mean_score = 0.
   best_nu_ = 0.
   best_n_comp_ = 0.
+  train_test_splits_index = [(train_index, test_index) for train_index, test_index in kf.split(X)]
+  if only_the_first_fold:
+    train_test_splits_index = train_test_splits_index[:1]
+    logger.info("Running only on the fold 0 of the %d folds cross-validation" % n_folds)
+    n_folds = 1 # to avoid the mean over folds that didn't run
+  else:
+    logger.info("Running on all of the %d folds of the cross-validation" % n_folds)
   for nu_, n_comp_  in itertools.product(nu_range, n_components_range):
     params_str = 'nu=%.3f, n_comp_=%d' % (nu_,n_comp_)
     mean_score = 0.
     fold_id = 0
     n_valid_folds = 0
-    for train_index, test_index in kf.split(X):
+    for train_index, test_index in train_test_splits_index:
       try:        
         logger.debug("[%s] [fold %d] TRAIN: %s, TEST: %s" % (params_str, fold_id, str(train_index), str(test_index)))
         X_train, X_test = X[train_index], X[test_index]
@@ -54,10 +60,11 @@ def select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_compon
       best_mean_score = mean_score
       best_nu_ = nu_
       best_n_comp_ = n_comp_
+      logger.info("got a better score (f1_score = %.3f) with nu_==%.3f & n_comp_==%d" % (best_mean_score, best_nu_, best_n_comp_))
     if best_mean_score == best_expectable_score:
       break
     #break
-  logger.info("best_mean_sean_score = %.3f (with nu_==%.3f & n_comp_==%d)" % (best_mean_score, best_nu_, best_n_comp_))
+  logger.info("best_score = %.3f (with nu_==%.3f & n_comp_==%d)" % (best_mean_score, best_nu_, best_n_comp_))
   return best_nu_, best_n_comp_
 
 
