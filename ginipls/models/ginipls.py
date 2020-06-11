@@ -4,7 +4,7 @@ import pandas as pd
 import math
 from scipy.stats import rankdata ## equiv rankindx de GAUSS
 from sklearn import linear_model
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score
 
 class Error(Exception):
   """Base class for exceptions in this module."""
@@ -507,7 +507,7 @@ class PLS():
     """    
     X_test = np.asmatrix(X_test)
     TT = self.transform(X_test)
-    #print("TT", TT)
+    #print("TT.shape", TT.shape)
     nt = X_test.shape[0] # nb instances test
     y_pred = np.asmatrix(np.zeros((nt,1)))
     yh = np.asmatrix(np.zeros((nt,1)))
@@ -613,11 +613,10 @@ class PLS():
   def score(self, X, y):
     """ predict the labels ypred for X and score the prediction with regard to the expected labels y 
     """
-    assert set(y) == {0,1}
     ypred = self.predict(X)
     #print("ypred", ypred)
     #print("y", y)
-    return f1_score(y, ypred)
+    return accuracy_score(y, ypred)
 
 if __name__ == "__main__":
   cls = PLS(pls_type = PLS_VARIANT.GINI)
