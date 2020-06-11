@@ -3,7 +3,7 @@ Gini-PLS
 
 Un algorithme de classification supervisée basée sur la méthode Gini-PLS généralisée
 
-Organisation du code source
+Project structure
 ---------------------------
 
     ├── LICENSE
@@ -28,4 +28,6 @@ Organisation du code source
             ├── ginipls.py <- Implémentation des variantes du Gini PLS
             ├── hyperparameters.py <- Implémentation du GridSearch pour déterminer de bonnes valeurs pour le nu et le nombre de composantes
         
-   
+Running
+-------
+`(py36)$> python -m ginipls --help`
