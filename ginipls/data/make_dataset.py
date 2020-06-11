@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import click
-import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import pandas as pd
@@ -9,8 +8,8 @@ from ginipls.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
 from ginipls.features.build_features import InputError
 import os
 import pickle
-
-logger = logging.getLogger(__name__)
+from ginipls.config import GLOBAL_LOGGER
+logger = GLOBAL_LOGGER
 
 def read_texts_file_to_dict(texts_csv_fpath, label_col="@label", text_col="@text", sep="\t"):
   """ Read a file of labeled texts and convert it into a dict.  
@@ -70,8 +69,8 @@ def fit_vsm_from_texts_file(texts_csv_fpath, vsm_fpath, label_col, text_col, sep
 @click.argument('input_train_texts_fpath', type=click.Path(exists=True))
 @click.argument('vsm_fpath', type=click.Path())
 @click.argument('output_train_vectors_fpath', type=click.Path())
-@click.option('--ngram_nmin', default=1, help='Min number of words in an ngram.',metavar='<int>', show_default=True)
-@click.option('--ngram_nmax', default=1, help='Max number of words in an ngram.',metavar='<int>', show_default=True)
+@click.option('--ngram_nmin', default=1, help='Min number of words in a ngram.',metavar='<int>', show_default=True)
+@click.option('--ngram_nmax', default=1, help='Max number of words in a ngram.',metavar='<int>', show_default=True)
 @click.option('--lang', default='en', help='Text language (fr, en).',metavar='<str>', show_default=True)
 @click.option('--vsm_scheme', default='tf-idf', help='VSM scheme like tf-idf or tf-chi2',metavar='<str>', show_default=True)
 @click.option('--label_col', default='@label', help='labels column name', show_default=True)

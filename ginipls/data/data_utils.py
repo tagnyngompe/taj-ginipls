@@ -2,6 +2,8 @@
 import pandas as pd
 import os, random, copy
 import numpy as np
+from ginipls.config import GLOBAL_LOGGER
+logger = GLOBAL_LOGGER
 
 #/***********************************************************************/
 #/*            Data ingestion: matrix loading and preprocessing         */
@@ -40,9 +42,9 @@ def load_data(data, output_col=0, index_col=None,
         the list of the ids of line
     """
     if isinstance(data, str):
-        #print("loading data from", data)
+        logger.info("loading data from %s" % os.path.abspath(data))
         if not os.path.exists(data):
-            print("Error: data_utils.load_data", data, "not found!")
+            logger.error("Error: data_utils.load_data", data, "not found!")
             raise FileExistsError
         data = pd.read_csv(filepath_or_buffer=data, sep=col_sep, header=header_row_num)
         #data.sample(frac=1)
@@ -55,7 +57,9 @@ def load_data(data, output_col=0, index_col=None,
     if not index_col is None :
         if isinstance(index_col, int):
             index_col = indep_var_names[index_col]
-        indep_var_names.remove(index_col)
+        if not index_col in indep_var_names :
+            logger.warning("the column %s of index is not in the input data" % index_col)
+            index_col = None
     if not output_col is None:
         indep_var_names.remove(output_col)  # supprime la catégorie (en présence de header, l'utilisation d'indice est impossible)
     cols_to_drop = []
@@ -63,6 +67,7 @@ def load_data(data, output_col=0, index_col=None,
         cols_to_drop += [output_col]
     instances_names = None
     if not index_col is None:
+        indep_var_names.remove(index_col)
         cols_to_drop += [index_col]
         instances_names = data[index_col].values.tolist()
     else:
@@ -84,13 +89,12 @@ def load_data(data, output_col=0, index_col=None,
         data = data.drop(cols_to_drop, 1)
 
     indep_var_matrix = data.values.tolist()
-    # print('h', indep_var_names)
-    # #print('h', len(indep_var_names))
-    # #print('X', indep_var_matrix)
-    # print('X', np.asarray(indep_var_matrix).shape)
-    # print('y', dep_var_values)
-    # print('ids', instances_names)
-    # print("end loading data")
+    # logger.debug('h=%s'str(indep_var_names))
+    # logger.debug('nb attributes=%d' % len(indep_var_names))
+    # logger.debug('X = %s', str(indep_var_matrix))
+    # logger.debug('X.shape=%s', str(np.asarray(indep_var_matrix).shape))
+    # logger.debug('y=%s' % str(dep_var_values))
+    # logger.debug('ids=%s' % str(instances_names))
     return indep_var_matrix, dep_var_values, indep_var_names, instances_names
 
 def save_data(row_index, values, y_file_name, col_sep=DEFAULT_COL_SEP):
@@ -122,41 +126,6 @@ def load_evaluation_data(y_file_name, y_col=1, col_sep=DEFAULT_COL_SEP, header_r
     """
     data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
     return data[y_col].tolist()
-
-
-def balance_data(x_init, y_init, ids_init):
-    x= copy.copy(x_init)
-    y=copy.copy(y_init)
-    ids = copy.copy(ids_init)
-    classes = set(y)
-    min_num = len(y)
-    c_min = None
-    nums = {}
-    for c in classes:
-        nums[c] = [i for i, j in zip(ids, y) if j == c]
-        num_c = len(nums[c])
-        if min_num > num_c:
-            c_min = c
-            min_num = num_c
-    #print("c_min", c_min)
-    #print("min_num", min_num)
-    selections = {}
-    instances_removed=[]
-    for c in classes:
-        if c == c_min or len(nums[c]) == min_num:
-            continue;
-        # on pique les éléments à supprimer dans les autres c
-        selections[c] = random.sample(nums[c], len(nums[c]) - min_num)
-        instances_removed += selections[c]
-        for i in selections[c]:
-            index = ids.index(i)
-            x = np.delete(x, index, 0)
-            y.pop(index)
-            ids.pop(index)
-    #print("nums", nums)
-    #print("selections", selections)
-    return x, y, ids, instances_removed
-
 
 def load_evaluation_data2(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP):
     """"""
