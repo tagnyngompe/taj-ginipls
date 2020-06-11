@@ -90,6 +90,12 @@ class PLS():
     """ 
     # Supression des colonnes de constantes 
     return np.asmatrix(pd.DataFrame(X).drop(idx_cols_to_remove, 1))
+  @staticmethod
+  def __encode_y__(y):
+    """Convert the 2 labels used in y (the expected output) into {0,1}"""
+    labels = list(set(y))
+    sorted(labels)
+    return np.asarray([labels.index(i) for i in y])
     
   def __init_variables(self, X_train, y_train):
     """
@@ -116,15 +122,13 @@ class PLS():
     n2: int
       nombre de non train (valeur 0)            
     """
-    X = np.asmatrix(X_train)        
+    X = np.asmatrix(X_train) 
+    y = PLS.__encode_y__(y_train)       
     n2 = 0 # nombre de oui train (valeur 1)
     n1 = 0 # nombre de non train (valeur 0)
     #print("ginipls.PLS.__init_variables y_train ", y_train)
-    # convert labels to {0,1}
-    labels = list(set(y_train))
-    sorted(labels)
-    y_train = np.asarray([labels.index(i) for i in y_train])
-    y = np.transpose(np.asmatrix(y_train))
+    # convert labels to {0,1}            
+    y = np.transpose(np.asmatrix(y))
     #print("ginipls.PLS.__init_variables y ", y)
     for vc in y :
         if vc == 0:
@@ -621,6 +625,7 @@ class PLS():
   def score(self, X, y):
     """ predict the labels ypred for X and score the prediction with regard to the expected labels y 
     """
+    y = PLS.__encode_y__(y)
     ypred = self.predict(X)
     #print("ypred", ypred)
     #print("y", y)
