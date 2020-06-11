@@ -98,14 +98,14 @@ def main(input_train_texts_fpath, vsm_fpath, output_train_vectors_fpath, ngram_n
 #python -m src.data.make_dataset data\raw\train_texts.tsv models\tfchi2.vsm.pt data\processed\train.tfchi2.vec.tsv --lang=en --vsm_scheme=tfchi2
 
 if __name__ == '__main__':
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.DEBUG, format=log_fmt)
+  log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  logging.basicConfig(level=logging.DEBUG, format=log_fmt)
 
-    # not used in this stub but often useful for finding various files
-    project_dir = Path(__file__).resolve().parents[2]
+  # not used in this stub but often useful for finding various files
+  project_dir = Path(__file__).resolve().parents[2]
 
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
+  # find .env automagically by walking up directories until it's found, then
+  # load up the .env entries as environment variables
+  load_dotenv(find_dotenv())
 
-    main()
+  main()
