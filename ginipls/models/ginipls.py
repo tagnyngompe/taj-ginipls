@@ -5,6 +5,7 @@ import math
 from scipy.stats import rankdata ## equiv rankindx de GAUSS
 from sklearn import linear_model
 from sklearn.metrics import f1_score, accuracy_score
+from ginipls.config import GLOBAL_LOGGER as logger
 
 class Error(Exception):
   """Base class for exceptions in this module."""
@@ -95,6 +96,7 @@ class PLS():
     """Convert the 2 labels used in y (the expected output) into {0,1}"""
     labels = list(set(y))
     sorted(labels)
+    logger.debug("labels codes : %s" % str({labels[i]:i for i in range(len(labels))}))
     return np.asarray([labels.index(i) for i in y])
     
   def __init_variables(self, X_train, y_train):
@@ -262,7 +264,7 @@ class PLS():
       Tj = np.matrix(np.zeros((n,j1)))  
       Tj = T[:,0:j1]  
       Tjp = np.transpose(Tj)
-      c[0:j1,0] = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp, y)) # utilisation de la pseudo inverse pour gérer les cas de matrices singulières
+      c[0:j1,0] = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp, y)) # utilisation de la pseudo inverse pour gérer les cas de matrices singulières
       eps[:,j] = y - np.dot(T[:,0:j1],c[0:j1,0])
       RSS[j,:] = np.sum(np.square(eps[:,j]), axis=0)    #  /* SCR */
       Q1 = np.sum(np.square(np.dot((T[:,0:j1]),c[0:j1,0])), axis=0)
@@ -274,7 +276,7 @@ class PLS():
       init = np.asmatrix(np.zeros((xr.shape[1],1)))
       if self.pls_type == PLS_VARIANT.STANDARD:
         for i in range(k):
-          b = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
+          b = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
           RES[:,i] = x[:,i]-np.dot(Tj, b) # Les résidus des régressions partielles sont mis en colonne
           pc[i,0:j1] = np.transpose(b)
           init[i,:] = np.cov(RES[:,i].T, eps[:,j].T)[0][1]
@@ -284,7 +286,7 @@ class PLS():
         #poids = np.asmatrix(np.zeros((xr.shape[1],1)))
         #init = np.asmatrix(np.zeros((xr.shape[1],2)))
         for i in range(k):
-          b = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
+          b = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
           RES[:,i] = x[:,i]-np.dot(Tj, b) # 
           pc[i,0:j1] = np.transpose(b)
           concat = np.concatenate((RES[:,i], Tj), axis=1)  
@@ -303,7 +305,7 @@ class PLS():
         for i in range(k):
           if self.centering_reduce_rank:
               rank[:,i] = rank[:,i]-np.mean(rank[:,i])
-          b = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
+          b = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp,x[:,i]))
           RES[:,i] = rank[:,i]-np.dot(Tj, b) # 
           pc[i,0:j1] = np.transpose(b)
           concat = np.concatenate((RES[:,i], Tj), axis=1)  
@@ -321,7 +323,7 @@ class PLS():
         for i in range(k):
           if self.centering_reduce_rank:
             rank[:,i] = rank[:,i]-np.mean(rank[:,i])
-          b = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp,rank[:,i]))
+          b = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp,rank[:,i]))
           RES[:,i] = rank[:,i]-np.dot(Tj, b) # Les résidus des régressions partielles sont mis en colonne
           pc[i,0:j1] = np.transpose(b)
           v[:,i] = np.asmatrix((xr.shape[0]+1-rankdata(RES[:,i], method='average'))**(self.nu-1)).T
@@ -343,7 +345,7 @@ class PLS():
         yv = np.delete(y, i, 0)
         Tvj = Tv[:,0:j1]
         Tvjp = np.transpose(Tvj)
-        b = np.dot(np.linalg.pinv(np.dot(Tvjp,Tvj)), np.dot(Tvjp,yv))
+        b = np.dot(np.linalg.inv(np.dot(Tvjp,Tvj)), np.dot(Tvjp,yv))
         PRESS[i,:]=np.square(y[i] - np.dot(T[i,0:j1], b))
       if j==0:
         Q[j,:]=1- np.asscalar(np.sum(PRESS, axis=0)/(RSS0*(n-1)))
@@ -369,7 +371,7 @@ class PLS():
 #        for h in range(self.n_components):
 #            Th = self.T[:,h]
 #            Thp = np.transpose(Th)
-#            b = np.asscalar(np.dot(np.linalg.pinv(np.dot(Thp,Th)), np.dot(Thp,y)))
+#            b = np.asscalar(np.dot(np.linalg.inv(np.dot(Thp,Th)), np.dot(Thp,y)))
 #            yh2 = np.square(b * self.T[:,h]) / np.sum(np.square(y),axis=0)
 #            M3[:,h] = np.sum(yh2[0:n,:],axis=0)
 #        VIP=np.asmatrix(np.zeros((k,self.n_components)))
@@ -401,7 +403,7 @@ class PLS():
       #A=np.asmatrix(np.zeros((n,2))) # A n'est pas utilisé dans la boucle => oui bien vu !
       Th = T[:,h]
       Thp = np.transpose(Th)
-      b = np.asscalar(np.dot(np.linalg.pinv(np.dot(Thp,Th)), np.dot(Thp,y)))
+      b = np.asscalar(np.dot(np.linalg.inv(np.dot(Thp,Th)), np.dot(Thp,y)))
       yh2 = np.square(b * T[:,h]) / np.sum(np.square(y),axis=0)
       M30[:,h] = np.sum(yh2[0:n1,:],axis=0)
       M31[:,h] = np.sum(yh2[n1:n,:],axis=0)
@@ -569,7 +571,7 @@ class PLS():
           #print('Tj1p', Tj1p.shape)
           #print('Tj1', Tj1.shape)
           #print('self.X_train[:,i]', self.X_train[:,i].shape)
-          BETA = np.dot(np.linalg.pinv(np.dot(Tj1p,Tj1)), np.dot(Tj1p,self.X_train[:,i]))
+          BETA = np.dot(np.linalg.inv(np.dot(Tj1p,Tj1)), np.dot(Tj1p,self.X_train[:,i]))
           RES[:,i] = X_test[:,i] - TT[:,0:(j+1)]*BETA
         TT[:,(j+1)] = RES * self.w[:,(j+1)] 
     elif self.pls_type == PLS_VARIANT.LOGIT:
@@ -582,7 +584,7 @@ class PLS():
           # print('Tj1p', Tj1p.shape)
           # print('Tj1', Tj1.shape)
           # print('self.X_train[:,i]', self.X_train[:,i].shape)
-          BETA = np.dot(np.linalg.pinv(np.dot(Tj1p,Tj1)), np.dot(Tj1p,self.X_train[:,i]))
+          BETA = np.dot(np.linalg.inv(np.dot(Tj1p,Tj1)), np.dot(Tj1p,self.X_train[:,i]))
           RES[:,i] = X_test[:,i] - TT[:,0:(j+1)]*BETA
         TT[:,(j+1)] = RES * self.w[:,(j+1)]        
     elif self.pls_type == PLS_VARIANT.GINI or self.pls_type == PLS_VARIANT.LOGIT_GINI:            
@@ -604,7 +606,7 @@ class PLS():
         Tj = self.T[:,0:(j+1)]
         Tjp = np.transpose(Tj)
         for i in range(k) :
-          b1 = np.dot(np.linalg.pinv(np.dot(Tjp,Tj)), np.dot(Tjp, self.rank_train[:,i]))
+          b1 = np.dot(np.linalg.inv(np.dot(Tjp,Tj)), np.dot(Tjp, self.rank_train[:,i]))
           RES[:,i] = Rang[:,i] - TT[:,0:(j+1)]*b1
         TT[:,(j+1)] = RES*self.w[:,(j+1)]
     return TT

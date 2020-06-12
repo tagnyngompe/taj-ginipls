@@ -5,8 +5,7 @@ import itertools # for cartesian product of params ranges
 from sklearn.model_selection import KFold
 import os
 from ginipls.models.ginipls import PLS, PLS_VARIANT
-from ginipls.config import GLOBAL_LOGGER
-logger = GLOBAL_LOGGER
+from ginipls.config import GLOBAL_LOGGER as logger
 
 
 ## DIY : sklearn.kfold + for(nu_range) + fit + score

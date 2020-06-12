@@ -51,4 +51,4 @@ done
 
 # USAGE:
 # source activate py27
-# bash evalnbsvm.sh ../cv-motifs/acpa_lemma_4_folds_cv acpa-accepte acpa-rejette  4
+# bash evalnbsvm.sh ../cv-motifs/acpa_lemma_4_folds_cv accepte acpa-rejette  4

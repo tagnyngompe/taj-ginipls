@@ -1,34 +1,42 @@
 # -*- coding: utf-8 -*-
 import click
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
+import os
+from os.path import isdir, isfile, join
 import pandas as pd
+import pickle
 from ginipls.features.build_features import TF_IDF, TF_CHI2
 from ginipls.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
-from ginipls.features.build_features import InputError
-import os
-import pickle
-from ginipls.config import GLOBAL_LOGGER
-logger = GLOBAL_LOGGER
+from ginipls.data.preprocess import TextPreprocessor
+from ginipls.config import GLOBAL_LOGGER as logger
 
-def read_texts_file_to_dict(texts_csv_fpath, label_col="@label", text_col="@text", sep="\t"):
-  """ Read a file of labeled texts and convert it into a dict.  
-  """
-# def read_texts_file_to_list(texts_csv_fpath, label_col="@category", text_col="@text", sep="\t"):
-  # """ Read a file of labeled texts and convert it into a list.  
-  # """
-  logger.info("reading text from %s" % texts_csv_fpath)
-  df = pd.read_csv(texts_csv_fpath, delimiter=sep)
-  return {c : [df.iloc[i][text_col] for i in df.index if df.iloc[i][label_col] == c] for c in set(df[label_col])}
-  
+LANG_FR = 'fr'
+LANG_EN = 'en'
+SPACY_MODEL_COMMON_SUFFIX = 'core_news_md'
+SPACY_FR_MODEL = 'fr_core_news_md' # python -m spacy download fr_core_news_md
+SPACY_EN_MODEL = 'en_core_web_md' # python -m spacy download en_core_web_md
+
+def collect_labels_docsfpaths(root='.'):
+    """
+    Collect labels and documents file path.
+    """
+    categories = filter(lambda d: isdir(join(root, d)), os.listdir(root))
+    labels_docsfpaths = {}
+    for c in categories:
+        labels_docsfpaths[c] = [os.path.join(root, c, d) for d in filter(lambda d: isfile(join(root, c, d)), os.listdir(join(root, c)))]
+
+    # categories and sub_categories are arrays,
+    # categories would hold stuff like 'science', 'maths'
+    # sub_categories would contain 'Quantum Mechanics', 'Linear Algebra', ...
+    return labels_docsfpaths
+
 def read_texts_file_to_texts_labels_lists(texts_csv_fpath, index_col = "@id", label_col="@label", text_col="@text", sep="\t"):
-  """ Read a file of labeled texts and convert it into two list texts and labels.  
+  """ Read a file of labeled texts and convert it into two list texts and labels.
   """
 # def read_texts_file_to_list(texts_csv_fpath, label_col="@category", text_col="@text", sep="\t"):
-  # """ Read a file of labeled texts and convert it into a list.  
+  # """ Read a file of labeled texts and convert it into a list.
   # """
   logger.info("reading text from %s" % texts_csv_fpath)
-  df = pd.read_csv(texts_csv_fpath, index_col=index_col,delimiter=sep) 
+  df = pd.read_csv(texts_csv_fpath, index_col=index_col,delimiter=sep)
   logger.debug("df\n%s" % str(df))
   return df.index.tolist(), df[text_col].tolist(), df[label_col].tolist()
 
@@ -44,18 +52,16 @@ def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, 
     df.loc[index[i]] = pd.Series({w : texts_words_weights[i][w] if w in texts_words_weights[i] else 0. for w in V})
     if labels is not None:
       df[label_col] = labels
-  logger.debug("df\n%s" % str(df))
-  df.to_csv(out_vectors_fpath, sep='\t', encoding='utf-8')
+  #logger.debug("df\n%s" % str(df))
+  df.to_csv(out_vectors_fpath, index_label="@id", sep='\t', encoding='utf-8')
   logger.info("vectors saved to %s" % out_vectors_fpath)
-  
 
-def fit_vsm_from_texts_file(texts_csv_fpath, vsm_fpath, label_col, text_col, sep, vsm_scheme, ngram_nmin, ngram_nmax, lang):
-  _, texts, labels = read_texts_file_to_texts_labels_lists(texts_csv_fpath, None, label_col, text_col, sep)
+def fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ngram_nmax):
   logger.info("Fitting the %s" % vsm_scheme)
   if vsm_scheme == TFIDF_SCHEME_NAME:
-    vsm = TF_IDF(ngram_nmin, ngram_nmax, lang)
+    vsm = TF_IDF(ngram_nmin, ngram_nmax)
   elif vsm_scheme == TFCHI2_SCHEME_NAME:
-    vsm = TF_CHI2(ngram_nmin, ngram_nmax, lang)
+    vsm = TF_CHI2(ngram_nmin, ngram_nmax)
   else:
     raise InputError(vsm_scheme, "Unsupported VSM scheme")
   vsm.fit(texts, labels)
@@ -65,46 +71,76 @@ def fit_vsm_from_texts_file(texts_csv_fpath, vsm_fpath, label_col, text_col, sep
   logger.info("%s saved at %s" % (vsm_scheme, vsm_fpath))
   return vsm
 
-@click.command(options_metavar='<options>')
-@click.argument('input_train_texts_fpath', type=click.Path(exists=True))
-@click.argument('vsm_fpath', type=click.Path())
-@click.argument('output_train_vectors_fpath', type=click.Path())
+
+@click.command(help = "build_features from a csv file with 1 (only texts) or 2 (texts with label or ids) or 3 columns ('doc_id\tlabel\ttext') and save the vectors in a csv file. Fit the vsm if vsm_fpath is None ")
+@click.argument('in_datasetfilename', type=click.Path(exists=True))
+@click.argument('vsm_fpath', type=click.Path(), required=False)
+@click.argument('out_vectorsfilename', type=click.Path())
+@click.option('--vsm_scheme', type=str, default='tf-idf', help='VSM scheme like tf-idf or tf-chi2', show_default=True)
 @click.option('--ngram_nmin', default=1, help='Min number of words in a ngram.',metavar='<int>', show_default=True)
 @click.option('--ngram_nmax', default=1, help='Max number of words in a ngram.',metavar='<int>', show_default=True)
-@click.option('--lang', default='en', help='Text language (fr, en).',metavar='<str>', show_default=True)
-@click.option('--vsm_scheme', default='tf-idf', help='VSM scheme like tf-idf or tf-chi2',metavar='<str>', show_default=True)
-@click.option('--label_col', default='@label', help='labels column name', show_default=True)
-@click.option('--text_col', default='@text', help='texts column name', show_default=True)
-@click.option('--index_col', default='@id', help='texts ids column name', show_default=True)
-@click.option('--sep', default='\t', help='column delimiter', show_default=True)
-
-def main(input_train_texts_fpath, vsm_fpath, output_train_vectors_fpath, ngram_nmin, ngram_nmax, lang, vsm_scheme, label_col, text_col, index_col,  sep):
-    """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
-    """
-    logger.info('making final data set from raw data : build vectors')
+@click.option('--label_col', type=str, help='labels column name', show_default=True)
+@click.option('--index_col', type=str, help='texts ids column name[optional]', show_default=True, required=False)
+@click.option('--text_col', type=str, help='texts content column name[optional]', show_default=True, required=False)
+@click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
+def vectorize(in_datasetfilename, vsm_fpath, out_vectorsfilename, vsm_scheme, ngram_nmin, ngram_nmax, label_col, index_col, text_col, col_sep):
+    # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_train0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_train0_tf-idf_1-2grams.tsv
+    # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_test0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_test0_tf-idf_1-2grams.tsv
+    logger.info('building %s vectors from %s' % (vsm_scheme, in_datasetfilename))
+    index, texts, labels = read_texts_file_to_texts_labels_lists(in_datasetfilename, index_col, label_col, text_col, col_sep)
     if os.path.isfile(vsm_fpath): # le modèle est déjà construit
-      logger.info("le modèle est déjà construit")
-      vsm = pickle.load(open(vsm_fpath, 'rb'))
-    else:      
-      vsm = fit_vsm_from_texts_file(input_train_texts_fpath, vsm_fpath, label_col, text_col, sep, vsm_scheme, ngram_nmin, ngram_nmax, lang)
-    index, texts, labels = read_texts_file_to_texts_labels_lists(input_train_texts_fpath, index_col, label_col, text_col, sep)
-    text_words_weights = [vsm.transform(text) for text in texts]
-    save_texts_words_weights_as_vectors_in_csv(text_words_weights, vsm.vocab_, output_train_vectors_fpath, index=index, labels=labels)
-    # print(read_texts_file_to_texts_labels_lists(input_train_texts_fpath, index_col, label_col, text_col, sep))
+        logger.info("le modèle est déjà construit")
+        vsm = pickle.load(open(vsm_fpath, 'rb'))
+    else:
+        vsm = fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ngram_nmax)
+    text_words_weights = vsm.transform(texts)
+    save_texts_words_weights_as_vectors_in_csv(text_words_weights, vsm.vocab_, out_vectorsfilename, index=index, labels=labels)
 
-# TO EXECUTE : python -m src.data.make_dataset data\raw\train_texts.tsv models\tfidf.vsm.pt data\processed\train.tfidf.vec.tsv --lang=en
-#python -m src.data.make_dataset data\raw\train_texts.tsv models\tfchi2.vsm.pt data\processed\train.tfchi2.vec.tsv --lang=en --vsm_scheme=tfchi2
+
+@click.group(help = "preprocess datasets (e.g. from raw to interim i.e. a csv file with 2/3 columns 'doc_id\tlabel\ttext')")
+def preprocess():
+    pass
+
+@preprocess.command("taj-sens-resultat", help="preprocess a dataset of court decision meaning polarity (sens du résultat) over a category of demands (a folder per labels, a file per document)")
+@click.argument('in_datasetdirname', type=click.Path(exists=True))
+@click.argument('out_datasetfilename', type=click.Path())
+@click.option('--language', type=str, default=LANG_FR, help='texts language (%s, %s)' % (LANG_FR, LANG_EN), show_default=True)
+@click.option('--lowercase/--no-lowercase', default=True, show_default=True)
+@click.option('--lemmatize/--no-lemmatize', default=False, show_default=True)
+def taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatize):
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/train0 data/interim/acpa_train0.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/test0 data/interim/acpa_test0.tsv
+    text_preprocessor = TextPreprocessor(lowercase, lemmatize)
+    labels_docsfpaths = collect_labels_docsfpaths(root=in_datasetdirname)
+    for label in labels_docsfpaths:
+        with open(out_datasetfilename, "w") as fw:
+            fw.write("@id\t@label\t@text\n")
+            for fpath in labels_docsfpaths[label]:
+                with open(fpath, "r") as f:
+                    text = text_preprocessor.process(f.read())
+                    docid = os.path.basename(fpath).split('.')[0]
+                    fw.write("%s\t%s\t%s\n" % (docid, label, text))
+
+@click.group(help = "This is the command line interface to process datasets")
+@click.option('--logging/--no-logging', default=True, help='column delimiter', show_default=True)
+def cli(logging):
+    logger.disabled = (not logging)
+
+cli.add_command(preprocess)
+cli.add_command(vectorize)
 
 if __name__ == '__main__':
-  log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-  logging.basicConfig(level=logging.DEBUG, format=log_fmt)
+    cli()
 
-  # not used in this stub but often useful for finding various files
-  project_dir = Path(__file__).resolve().parents[2]
-
-  # find .env automagically by walking up directories until it's found, then
-  # load up the .env entries as environment variables
-  load_dotenv(find_dotenv())
-
-  main()
+# preprocess taj-sens-resultat dataset
+# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/train0 data/interim/acpa_train0.tsv
+# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/test0 data/interim/acpa_test0.tsv
+# vectorize texts files into matrices
+# python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_train0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_train0_tf-idf_1-2grams.tsv
+# python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_test0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_test0_tf-idf_1-2grams.tsv
+# python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-chi2 --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_train0.tsv data/models/acpa_train0_tf-chi2_1-2grams.model data/processed/acpa_train0_tf-chi2_1-2grams.tsv
+# python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-chi2 --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_test0.tsv data/models/acpa_train0_tf-chi2_1-2grams.model data/processed/acpa_test0_tf-chi2_1-2grams.tsv
+# train models
+# python -m ginipls train on-vectors --label_col=@label --index_col=@id --crossval_hyperparam --pls_type=GINI --n_components_range=[10] data/processed/acpa_train0_tf-idf_1-2grams.tsv data/models/acpa_train0_tf-idf_1-2grams_GINIPLS.model
+# python -m ginipls train on-vectors --label_col=@label --index_col=@id --no-crossval_hyperparam --pls_type=GINI data/processed/acpa_train0_tf-chi2_1-2grams.tsv data/models/acpa_train0_tf-chi2_1-2grams_GINIPLS.model
+# python -m ginipls apply on-vectors --label_col=category --index_col=@id data/processed/acpa_train0_tf-chi2_1-2grams.tsv data/models/acpa_train0_tf-chi2_1-2grams_GINIPLS.model"""
