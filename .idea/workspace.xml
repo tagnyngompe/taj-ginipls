@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ginipls/experiments/__main__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/processed/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/preprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ginipls/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/data/make_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/experiments/scripts/evalnbsvm.sh" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/scripts/evalnbsvm.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/features/build_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/features/build_features.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/data/data_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/data_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ginipls/models/ginipls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/models/ginipls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/models/hyperparameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/models/hyperparameters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +53,28 @@
       <recent name="$PROJECT_DIR$/src/unittests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.bestconfig">
+  <component name="RunManager" selected="Python.__main__">
+    <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="taj-ginilogitpls" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ginipls/experiments" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ginipls/experiments/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,27 +180,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_load_data.TestLoad_data.test_f1_macro_average" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="taj-ginilogitpls" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/unittests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_load_data.TestLoad_data.test_f1_macro_average&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.__main__" />
         <item itemvalue="Python.bestconfig" />
         <item itemvalue="Python.hyperparameters" />
         <item itemvalue="Python.test_ginipls" />
         <item itemvalue="Python.api" />
-        <item itemvalue="Python tests.Unittests for test_load_data.TestLoad_data.test_f1_macro_average" />
       </list>
     </recent_temporary>
   </component>
@@ -198,43 +201,66 @@
       <option name="presentableId" value="Default" />
       <updated>1555069126346</updated>
     </task>
+    <task id="LOCAL-00001" summary="make dataset and preprocesed text datasets">
+      <created>1591927036539</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1591927036539</updated>
+    </task>
+    <task id="LOCAL-00002" summary="DATASET crossvalidation structure">
+      <created>1591927094897</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1591927094897</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
-  <component name="TodoView" selected-index="2">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="make dataset and preprocesed text datasets" />
+    <MESSAGE value="DATASET crossvalidation structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="DATASET crossvalidation structure" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="343" y="86" width="912" height="911" key="CommitChangelistDialog2" timestamp="1591927094827">
+      <screen x="0" y="27" width="1608" height="1023" />
+    </state>
+    <state x="343" y="86" width="912" height="911" key="CommitChangelistDialog2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927094827" />
     <state x="578" y="305" width="424" height="491" key="FileChooserDialogImpl" timestamp="1589234020403">
       <screen x="0" y="27" width="1610" height="1023" />
     </state>
     <state x="578" y="305" width="424" height="491" key="FileChooserDialogImpl/0.27.1610.1023@0.27.1610.1023" timestamp="1589234020403" />
-    <state width="1587" height="340" key="GridCell.Tab.0.bottom" timestamp="1589237831063">
-      <screen x="0" y="27" width="1610" height="1023" />
+    <state width="1391" height="340" key="GridCell.Tab.0.bottom" timestamp="1591931494438">
+      <screen x="0" y="27" width="1608" height="1023" />
     </state>
+    <state width="1391" height="340" key="GridCell.Tab.0.bottom/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.bottom/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
-    <state width="1587" height="340" key="GridCell.Tab.0.center" timestamp="1589237831062">
-      <screen x="0" y="27" width="1610" height="1023" />
+    <state width="1391" height="340" key="GridCell.Tab.0.center" timestamp="1591931494438">
+      <screen x="0" y="27" width="1608" height="1023" />
     </state>
+    <state width="1391" height="340" key="GridCell.Tab.0.center/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.center/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831062" />
-    <state width="1587" height="340" key="GridCell.Tab.0.left" timestamp="1589237831061">
-      <screen x="0" y="27" width="1610" height="1023" />
+    <state width="1391" height="340" key="GridCell.Tab.0.left" timestamp="1591931494437">
+      <screen x="0" y="27" width="1608" height="1023" />
     </state>
+    <state width="1391" height="340" key="GridCell.Tab.0.left/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494437" />
     <state width="1587" height="340" key="GridCell.Tab.0.left/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831061" />
-    <state width="1587" height="340" key="GridCell.Tab.0.right" timestamp="1589237831063">
-      <screen x="0" y="27" width="1610" height="1023" />
+    <state width="1391" height="340" key="GridCell.Tab.0.right" timestamp="1591931494438">
+      <screen x="0" y="27" width="1608" height="1023" />
     </state>
+    <state width="1391" height="340" key="GridCell.Tab.0.right/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.right/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
     <state x="72" y="111" width="1022" height="737" key="SettingsEditor" timestamp="1591908690677">
       <screen x="0" y="27" width="1608" height="1023" />
     </state>
     <state x="72" y="111" key="SettingsEditor/0.27.1608.1023@0.27.1608.1023" timestamp="1591908690677" />
     <state x="298" y="206" width="1022" height="737" key="SettingsEditor/0.27.1610.1023@0.27.1610.1023" timestamp="1589234055564" />
+    <state x="399" y="274" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1591927384866">
+      <screen x="0" y="27" width="1608" height="1023" />
+    </state>
+    <state x="399" y="274" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927384866" />
     <state width="805" height="511" key="XDebugger.FullValuePopup" timestamp="1589234509169">
       <screen x="0" y="27" width="1610" height="1023" />
     </state>
@@ -243,6 +269,17 @@
       <screen x="0" y="27" width="1610" height="1023" />
     </state>
     <state x="461" y="366" key="com.intellij.ide.util.TipDialog/0.27.1610.1023@0.27.1610.1023" timestamp="1587743402925" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ginipls/models/hyperparameters.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="masterDetails">
     <states>

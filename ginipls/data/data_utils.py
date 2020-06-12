@@ -49,7 +49,6 @@ def load_data(data, output_col=0, index_col=None,
         data = pd.read_csv(filepath_or_buffer=data, sep=col_sep, header=header_row_num)
         #data.sample(frac=1)
         # Tri des matrices avec pandas
-    #print(data.columns.values)
     if sort_output and not output_col is None:
         data = data.sort_values(by=output_col)
     # get header, dependent/independent variables for analysis.
