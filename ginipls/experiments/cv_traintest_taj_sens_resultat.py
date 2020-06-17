@@ -26,16 +26,16 @@ def main(dmd_category, wd):
     nu_max = 3
     nu_step = 0.1
     nu_range = [i * nu_step for i in range(int(nu_min / nu_step), int(nu_max / nu_step))]
-    nu_range = [1.3]
+    #nu_range = [1.3]
 
     n_components_min = 2
     n_components_max = 10  # nb de caractéristiques
     n_components_step = 1
     n_components_range = range(n_components_min, n_components_max, n_components_step)
-    n_components_range = [2]
+    #n_components_range = [2]
 
-    hyperparams_nfolds = 2
-    crossval_hyperparam = False
+    hyperparams_nfolds = 4
+    crossval_hyperparam = True
 
     label_col='@label'
     index_col='@id'
@@ -61,12 +61,10 @@ def main(dmd_category, wd):
             # apply
             apply_on_vectors(trainfilename, classifierfilename, trainpredfilename, label_col, index_col, col_sep)
             apply_on_vectors(testfilename, classifierfilename, testpredfilename, label_col, index_col, col_sep)
-            #break
-        #break
 
 
 if __name__ == "__main__":
-    # python -m ginipls.experiments.predict_taj_sens_resultat acpa data/taj-sens-resultat
+    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data/taj-sens-resultat
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     main(demand_category, wd)

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/experiments/predict_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/cv_traintest_taj_sens_resultat.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +72,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="cv_traintest_taj_sens_resultat" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="taj-ginilogitpls" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ginipls/experiments" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\gtngompe\GitHub\taj-ginipls\ginipls\experiments\cv_traintest_taj_sens_resultat.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="make_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,27 +127,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ginipls/data/make_taj_sens_resultat_dataset.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="predict_taj_sens_resultat" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="taj-ginilogitpls" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ginipls/experiments" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\gtngompe\GitHub\taj-ginipls\ginipls\experiments\predict_taj_sens_resultat.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -183,7 +183,7 @@
         <item itemvalue="Python.build_features" />
         <item itemvalue="Python.preprocess" />
         <item itemvalue="Python.make_dataset" />
-        <item itemvalue="Python.predict_taj_sens_resultat" />
+        <item itemvalue="Python.cv_traintest_taj_sens_resultat" />
       </list>
     </recent_temporary>
   </component>
@@ -233,7 +233,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592404909863</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="from data processing to evaluation">
+      <created>1592406105316</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1592406105316</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -247,10 +254,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="603" y="306" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1592372934023" />
-    <state x="410" y="60" width="912" height="911" key="CommitChangelistDialog2" timestamp="1592404908707">
+    <state x="410" y="60" width="912" height="911" key="CommitChangelistDialog2" timestamp="1592406104591">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="410" y="60" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592404908707" />
+    <state x="410" y="60" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592406104591" />
     <state x="343" y="86" width="912" height="911" key="CommitChangelistDialog2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927094827" />
     <state x="689" y="283" width="424" height="491" key="FileChooserDialogImpl" timestamp="1592380057424">
       <screen x="0" y="0" width="1920" height="1040" />
