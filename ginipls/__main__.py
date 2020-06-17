@@ -34,7 +34,7 @@ def cast_click_list(value):
 def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfolds, nu_range, n_components_range, only_the_first_fold):
   """"""
   best_nu, best_n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X_train, y_train, nu_range, n_components_range, hyerparameters_selection_nfolds, only_the_first_fold=only_the_first_fold)
-  #logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (nu, n_comp))
+  logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (nu, n_comp))
   gpls = PLS(pls_type=pls_type, nu=best_nu, n_components=best_n_comp)
   gpls.fit(X_train, y_train)
   train_score = gpls.score(X_train, y_train)
