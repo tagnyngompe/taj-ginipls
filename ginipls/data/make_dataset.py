@@ -89,6 +89,11 @@ def form_evaluation_data():
 @click.argument('in_datasetfilename', type=click.Path(exists=True))
 @click.argument('dest_dirname', type=click.Path())
 # python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/acpa.tsv data/interim/taj-sens-resultat-cv
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/concdel.tsv data/interim/taj-sens-resultat-cv
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/danais.tsv data/interim/taj-sens-resultat-cv
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/dcppc.tsv data/interim/taj-sens-resultat-cv
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/doris.tsv data/interim/taj-sens-resultat-cv
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/styx.tsv data/interim/taj-sens-resultat-cv
 def cv_traintest_from_dataset_file(nfolds, in_datasetfilename, dest_dirname):
     os.makedirs(dest_dirname, exist_ok=True)
     datasetname = os.path.basename(in_datasetfilename).split('.')[0]
@@ -262,6 +267,11 @@ def preprocess():
 @click.option('--removesinglechartoken/--no-removesinglechartoken', default=True, show_default=True)
 def preprocess_taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatizer, removepunct, removesinglechartoken):
     # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/acpa data/interim/taj-sens-resultat-pp/acpa.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/concdel data/interim/taj-sens-resultat-pp/concdel.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/danais data/interim/taj-sens-resultat-pp/danais.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/dcppc data/interim/taj-sens-resultat-pp/dcppc.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/doris data/interim/taj-sens-resultat-pp/doris.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/styx data/interim/taj-sens-resultat-pp/styx.tsv
     os.makedirs(os.path.dirname(out_datasetfilename), exist_ok=True)
     text_preprocessor = TextPreprocessor(language, lowercase, lemmatizer, removepunct, removesinglechartoken)
     labels_docsfpaths = collect_labels_docsfpaths(root=in_datasetdirname)

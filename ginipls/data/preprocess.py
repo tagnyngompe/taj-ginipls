@@ -40,13 +40,13 @@ class TextPreprocessor():
             french_lemmatizer = LefffLemmatizer(after_melt=True, default=True)
             self.nlp.add_pipe(pos, name='pos', after='parser')
             self.nlp.add_pipe(french_lemmatizer, name='lefff', after='pos')
-            ptext = " ".join([token._.lefff_lemma for token in self.nlp(ptext)])
+            ptext = " ".join([token._.lefff_lemma for token in self.nlp(ptext) if hasattr(token, '_') and hasattr(token._, 'lefff_lemma')])
         return ptext
 
     def process_with_treetagger(self, text):
         tags = self.treetagger.tag_text(text)
         tags2 = treetaggerwrapper.make_tags(tags)
-        ptext = " ".join([token.lemma for token in tags2])
+        ptext = " ".join([token.lemma for token in tags2 if hasattr(token, 'lemma')])
         return ptext
 
     def process(self, text):
