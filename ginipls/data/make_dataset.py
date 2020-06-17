@@ -3,17 +3,15 @@ import click
 import os
 from os.path import isdir, isfile, join
 import pandas as pd
+import csv
 import pickle
-from ginipls.features.build_features import TF_IDF, TF_CHI2
+import unidecode # remove accents from str
+import shutil # copy files
+from ginipls.features.build_features import TF_IDF, TF_CHI2, InputError
 from ginipls.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
-from ginipls.data.preprocess import TextPreprocessor
+from ginipls.data.preprocess import TextPreprocessor, LANG_FR, LANG_EN, TREETAGGER_PREPROCESSOR, SPACY_PREPROCESSOR
 from ginipls.config import GLOBAL_LOGGER as logger
 
-LANG_FR = 'fr'
-LANG_EN = 'en'
-SPACY_MODEL_COMMON_SUFFIX = 'core_news_md'
-SPACY_FR_MODEL = 'fr_core_news_md' # python -m spacy download fr_core_news_md
-SPACY_EN_MODEL = 'en_core_web_md' # python -m spacy download en_core_web_md
 
 def collect_labels_docsfpaths(root='.'):
     """
@@ -29,6 +27,7 @@ def collect_labels_docsfpaths(root='.'):
     # sub_categories would contain 'Quantum Mechanics', 'Linear Algebra', ...
     return labels_docsfpaths
 
+
 def read_texts_file_to_texts_labels_lists(texts_csv_fpath, index_col = "@id", label_col="@label", text_col="@text", sep="\t"):
   """ Read a file of labeled texts and convert it into two list texts and labels.
   """
@@ -39,6 +38,7 @@ def read_texts_file_to_texts_labels_lists(texts_csv_fpath, index_col = "@id", la
   df = pd.read_csv(texts_csv_fpath, index_col=index_col,delimiter=sep)
   logger.debug("df\n%s" % str(df))
   return df.index.tolist(), df[text_col].tolist(), df[label_col].tolist()
+
 
 def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, out_vectors_fpath, index = None, labels=None, label_col="@label"):
   """"""
@@ -56,6 +56,7 @@ def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, 
   df.to_csv(out_vectors_fpath, index_label="@id", sep='\t', encoding='utf-8')
   logger.info("vectors saved to %s" % out_vectors_fpath)
 
+
 def fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ngram_nmax):
   logger.info("Fitting the %s" % vsm_scheme)
   if vsm_scheme == TFIDF_SCHEME_NAME:
@@ -70,6 +71,51 @@ def fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ng
   pickle.dump(vsm, open(vsm_fpath, 'wb'))
   logger.info("%s saved at %s" % (vsm_scheme, vsm_fpath))
   return vsm
+
+
+@click.group(help="select specific data")
+def select_data():
+    pass
+
+
+@select_data.command(help="select taj-sens-resultat dataset for a given claim type : decisions with a single claim.")
+@click.argument('object', type=str)
+@click.argument('norm', type=str)
+@click.argument('in_decisions_dir', type=click.Path(exists=True))
+@click.argument('claims_annotations_csv', type=click.Path(exists=True))
+@click.argument('out_decisions_dir', type=click.Path())
+@click.argument('object_colnum', type=int, default=3)
+@click.argument('norm_colnum', type=int, default=5)
+@click.argument('resultat_colnum', type=int, default=-4)
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "amende civile" "32-1 code de procédure civile + 559 code de procédure civile : pour procédure abusive" data/raw/txt-all/acpa data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/acpa
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "dommages-intérêts" "1382 code civil : concurrence déloyale" data/raw/txt-all/concdel data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/concdel
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "dommages-intérêts" "1382 code civil + 32-1 code de procédure civile : en procédure abusive" data/raw/txt-all/danais data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/danais
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "déclaration de créance au passif de la procédure collective" "L622-24 code de commerce : déclaration de créance au passif de la procédure collective" data/raw/txt-all/dcppc data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/dcppc
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "dommages-intérêts" "principe de responsabilité pour trouble anormal de voisinage" data/raw/txt-all/doris data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/doris
+# python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "dommages-intérêts" "700 Code de Procédure Civile" data/raw/txt-all/styx data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/styx
+def taj_sens_resultat_data(object, norm, in_decisions_dir, claims_annotations_csv, out_decisions_dir, object_colnum, norm_colnum, resultat_colnum):
+    with open(claims_annotations_csv, 'r', encoding='utf-8') as csvfile:
+        decision_resultats = {}
+        csvreader = csv.reader(csvfile, delimiter='\t')
+        for row in csvreader:
+            #print(row[object_colnum], row[norm_colnum])
+            if row[object_colnum] == object and row[norm_colnum] == norm:
+                decision_id = ("".join([row[0].upper(), unidecode.unidecode(row[1][:3]).upper(), row[2].replace('/', '').upper(),".txt"]))
+                if decision_id not in decision_resultats:
+                    decision_resultats[decision_id] = list()
+                decision_resultats[decision_id].append(row[resultat_colnum].strip())
+        for decision_id in decision_resultats:
+            if len(decision_resultats[decision_id]) == 1:
+                #print(decision_id, decision_resultats[decision_id])
+                sens_resultat = decision_resultats[decision_id][0]
+                dest_dirname = os.path.join(out_decisions_dir, sens_resultat)
+                os.makedirs(dest_dirname, exist_ok=True)
+                src_decision_fname = os.path.join(in_decisions_dir, decision_id)
+                dest_decision_fname = os.path.join(dest_dirname, decision_id)
+                if not os.path.isfile(src_decision_fname):
+                    print(src_decision_fname)
+                else:
+                    shutil.copy(src_decision_fname, dest_decision_fname)
 
 
 @click.command(help = "build_features from a csv file with 1 (only texts) or 2 (texts with label or ids) or 3 columns ('doc_id\tlabel\ttext') and save the vectors in a csv file. Fit the vsm if vsm_fpath is None ")
@@ -101,31 +147,35 @@ def vectorize(in_datasetfilename, vsm_fpath, out_vectorsfilename, vsm_scheme, ng
 def preprocess():
     pass
 
+
 @preprocess.command("taj-sens-resultat", help="preprocess a dataset of court decision meaning polarity (sens du résultat) over a category of demands (a folder per labels, a file per document)")
 @click.argument('in_datasetdirname', type=click.Path(exists=True))
 @click.argument('out_datasetfilename', type=click.Path())
 @click.option('--language', type=str, default=LANG_FR, help='texts language (%s, %s)' % (LANG_FR, LANG_EN), show_default=True)
 @click.option('--lowercase/--no-lowercase', default=True, show_default=True)
-@click.option('--lemmatize/--no-lemmatize', default=False, show_default=True)
-def taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatize):
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/train0 data/interim/acpa_train0.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/test0 data/interim/acpa_test0.tsv
-    text_preprocessor = TextPreprocessor(lowercase, lemmatize)
+@click.option('--lemmatizer', default=None, help=" ".join([SPACY_PREPROCESSOR, TREETAGGER_PREPROCESSOR]), show_default=True)
+def preprocess_taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatizer):
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/acpa data/interim/taj-sens-resultat/acpa.tsv
+    os.makedirs(os.path.dirname(out_datasetfilename), exist_ok=True)
+    text_preprocessor = TextPreprocessor(language, lowercase, lemmatizer)
     labels_docsfpaths = collect_labels_docsfpaths(root=in_datasetdirname)
-    for label in labels_docsfpaths:
-        with open(out_datasetfilename, "w") as fw:
-            fw.write("@id\t@label\t@text\n")
+    with open(out_datasetfilename, "w", encoding='utf-8') as fw:
+        fw.write("@id\t@label\t@text\n")
+        for label in labels_docsfpaths:
             for fpath in labels_docsfpaths[label]:
-                with open(fpath, "r") as f:
+                with open(fpath, "r", encoding='utf-8') as f:
                     text = text_preprocessor.process(f.read())
                     docid = os.path.basename(fpath).split('.')[0]
                     fw.write("%s\t%s\t%s\n" % (docid, label, text))
+
 
 @click.group(help = "This is the command line interface to process datasets")
 @click.option('--logging/--no-logging', default=True, help='column delimiter', show_default=True)
 def cli(logging):
     logger.disabled = (not logging)
 
+
+cli.add_command(select_data)
 cli.add_command(preprocess)
 cli.add_command(vectorize)
 

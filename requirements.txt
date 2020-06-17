@@ -21,3 +21,7 @@ scipy==1.1.0
 ##install french model : python -m spacy download fr_core_news_md
 spacy
 spacy-lefff
+treetaggerwrapper
+
+# remove accent from str
+unidecode

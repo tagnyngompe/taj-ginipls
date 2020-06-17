@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ginipls/experiments/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/data/data_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/data_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/models/ginipls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/models/ginipls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/data/make_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/data/preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/preprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +35,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/test0" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data/raw/txt-all/doris" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="terminalCustomCommandExecutionTurnOff" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Corsair\GitHub\taj-ginipls\data\raw\txt-all\doris" />
+      <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/test0" />
+      <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/train0" />
+      <recent name="$PROJECT_DIR$/ginipls/data" />
+      <recent name="$PROJECT_DIR$/data/processed" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data/processed" />
       <recent name="$PROJECT_DIR$/src/experiments/learning" />
@@ -45,15 +54,8 @@
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/test0" />
-      <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/train0" />
-      <recent name="$PROJECT_DIR$/ginipls/data" />
-      <recent name="$PROJECT_DIR$/data/processed" />
-      <recent name="$PROJECT_DIR$/src/unittests" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python.__main__">
+  <component name="RunManager" selected="Python.make_dataset">
     <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="taj-ginilogitpls" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -67,27 +69,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ginipls/experiments/__main__.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="taj-ginilogitpls" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/experiments" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/experiments/api.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -130,6 +111,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/experiments/learning/hyperparameters.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="make_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="taj-ginilogitpls" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ginipls/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ginipls/data/make_dataset.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -182,11 +184,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.make_dataset" />
         <item itemvalue="Python.__main__" />
         <item itemvalue="Python.bestconfig" />
         <item itemvalue="Python.hyperparameters" />
         <item itemvalue="Python.test_ginipls" />
-        <item itemvalue="Python.api" />
       </list>
     </recent_temporary>
   </component>
@@ -224,6 +226,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="DATASET crossvalidation structure" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="603" y="306" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1592372934023">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="603" y="306" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1592372934023" />
     <state x="343" y="86" width="912" height="911" key="CommitChangelistDialog2" timestamp="1591927094827">
       <screen x="0" y="27" width="1608" height="1023" />
     </state>
@@ -232,29 +238,34 @@
       <screen x="0" y="27" width="1610" height="1023" />
     </state>
     <state x="578" y="305" width="424" height="491" key="FileChooserDialogImpl/0.27.1610.1023@0.27.1610.1023" timestamp="1589234020403" />
-    <state width="1391" height="340" key="GridCell.Tab.0.bottom" timestamp="1591931494438">
-      <screen x="0" y="27" width="1608" height="1023" />
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom" timestamp="1592343628696">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1592343628696" />
     <state width="1391" height="340" key="GridCell.Tab.0.bottom/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.bottom/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
-    <state width="1391" height="340" key="GridCell.Tab.0.center" timestamp="1591931494438">
-      <screen x="0" y="27" width="1608" height="1023" />
+    <state width="1659" height="272" key="GridCell.Tab.0.center" timestamp="1592343628696">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1592343628696" />
     <state width="1391" height="340" key="GridCell.Tab.0.center/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.center/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831062" />
-    <state width="1391" height="340" key="GridCell.Tab.0.left" timestamp="1591931494437">
-      <screen x="0" y="27" width="1608" height="1023" />
+    <state width="1659" height="272" key="GridCell.Tab.0.left" timestamp="1592343628696">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1592343628696" />
     <state width="1391" height="340" key="GridCell.Tab.0.left/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494437" />
     <state width="1587" height="340" key="GridCell.Tab.0.left/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831061" />
-    <state width="1391" height="340" key="GridCell.Tab.0.right" timestamp="1591931494438">
-      <screen x="0" y="27" width="1608" height="1023" />
+    <state width="1659" height="272" key="GridCell.Tab.0.right" timestamp="1592343628696">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1592343628696" />
     <state width="1391" height="340" key="GridCell.Tab.0.right/0.27.1608.1023@0.27.1608.1023" timestamp="1591931494438" />
     <state width="1587" height="340" key="GridCell.Tab.0.right/0.27.1610.1023@0.27.1610.1023" timestamp="1589237831063" />
-    <state x="72" y="111" width="1022" height="737" key="SettingsEditor" timestamp="1591908690677">
-      <screen x="0" y="27" width="1608" height="1023" />
+    <state x="75" y="83" width="1022" height="737" key="SettingsEditor" timestamp="1592257214009">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
+    <state x="75" y="83" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592257214009" />
     <state x="72" y="111" key="SettingsEditor/0.27.1608.1023@0.27.1608.1023" timestamp="1591908690677" />
     <state x="298" y="206" width="1022" height="737" key="SettingsEditor/0.27.1610.1023@0.27.1610.1023" timestamp="1589234055564" />
     <state x="399" y="274" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1591927384866">
