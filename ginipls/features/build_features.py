@@ -2,8 +2,8 @@ from collections import Counter
 from math import log, sqrt
 from ginipls.config import GLOBAL_LOGGER as logger
 
-TFIDF_SCHEME_NAME = 'tf-idf'
-TFCHI2_SCHEME_NAME = 'tf-chi2'
+TFIDF_SCHEME_NAME = 'tfidf'
+TFCHI2_SCHEME_NAME = 'tfchi2'
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -23,11 +23,18 @@ class InputError(Error):
 
 
 class VSM:
-  def __init__(self, ngram_nmin=1, ngram_nmax=1):
+  def __init__(self, ngram_nmin=1, ngram_nmax=1, df_min=2):
+    """
+
+    :param ngram_nmin:
+    :param ngram_nmax:
+    :param df_min: remove from vocabulary all the words that appear in less than df_min texts
+    """
     assert ngram_nmin > 0
     assert ngram_nmin <= ngram_nmax
     self.ngram_nmin = ngram_nmin
     self.ngram_nmax = ngram_nmax
+    self.df_min = df_min
   @staticmethod
   def ngrams(text, n):
     text = text.split()
@@ -52,6 +59,17 @@ class VSM:
     return {w : c / text_nb_words for w,c in VSM.count_words_occurrences_in_text(text_words).items()}
   def compute_local_weights(self, text):
     pass
+  def select_vocabulary(self, texts):
+    texts_words = [self.convert_text_to_words_list(text) for text in texts]
+    self.Nw = VSM.count_words_doc_freq_in_texts(texts_words)
+    self.vocab_ = set([w for w in self.Nw if self.Nw[w]>=self.df_min])  # vocabulaire
+  def clean_vocab(self):
+    # remove all word that has a null globalweight
+    V = self.vocab_.copy()
+    for w in V:
+      if self.words_gweights[w] == 0.:
+        self.vocab_.remove(w)
+        del self.words_gweights[w]
   def fit(self, texts, labels=None):
     pass
   def transform(self, texts):
@@ -73,8 +91,9 @@ class TF_IDF(VSM):
     N = len(texts)
     texts_words = [self.convert_text_to_words_list(t) for t in texts]
     logger.debug('texts_words = %s' % str(texts_words))
-    self.words_gweights = {w : log( N / df ) for w, df in VSM.count_words_doc_freq_in_texts(texts_words).items()}
-    self.vocab_ = sorted(list(self.words_gweights.keys()))
+    self.select_vocabulary(texts)
+    self.words_gweights = {w : log( N / df ) for w, df in VSM.count_words_doc_freq_in_texts(texts_words).items() if w in self.vocab_}
+    self.clean_vocab()
     logger.info("self.vocab_ = %s" % str(self.vocab_))
   def compute_local_weights(self, text):
     return self.compute_tf_weights(text)
@@ -102,8 +121,7 @@ class TF_CHI2(VSM):
     all_texts_words = [t for c in labels_texts_words for t in labels_texts_words[c]]
     #logger.debug('all_texts_words = %s' % str(all_texts_words))
     #logger.debug(all_texts_words)
-    self.vocab_ = sorted(list(set([w for tw in all_texts_words for w in tw]))) # vocabulaire
-    logger.info("self.vocab_ = %s" % str(self.vocab_))
+    self.select_vocabulary(texts) # vocabulaire
     #logger.debug('V=%s' % str(V))
     N = len(all_texts_words) #nb total de tex
     logger.debug('N=%d' % N)
@@ -135,6 +153,8 @@ class TF_CHI2(VSM):
     #logger.debug('chi2wc', chi2wc)
     logger.debug('chi2wc%s' % str(chi2wc))
     self.words_gweights = {w : max(chi2wc[w].values()) for w in self.vocab_}
+    self.clean_vocab()
+    logger.info("self.vocab_ = %s" % str(self.vocab_))
     #logger.debug('self.words_gweights', self.words_gweights) 
   def compute_local_weights(self, text):
     return self.compute_tf_weights(text)
@@ -150,6 +170,8 @@ if __name__ == "__main__":
   labels = [0,0,1,1]
   ########## TF-IDF
   vsm = TF_IDF(1,1)
+  # vsm.select_vocabulary(texts)
+  # logger.info('vocab_=%s' % str(vsm.vocab_))
   train_vec = vsm.fit_transform(texts)
   logger.info('TF-IDF=%s' % str(train_vec))
   ########## TF_CHI2

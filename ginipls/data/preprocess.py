@@ -1,3 +1,4 @@
+import string
 import spacy
 import treetaggerwrapper
 from spacy_lefff import LefffLemmatizer, POSTagger # https://pypi.org/project/spacy-lefff/
@@ -11,8 +12,13 @@ SPACY_EN_MODEL = 'en_core_web_md' # python -m spacy download en_core_web_md
 SPACY_PREPROCESSOR = "spacy"
 TREETAGGER_PREPROCESSOR = "treetagger"
 
+def containsAny(str, set):
+    """ Check whether sequence str contains ANY of the items in set. """
+    return 1 in [c in str for c in set]
+
+
 class TextPreprocessor():
-    def __init__(self, language, tolowercase, lemmatizer):
+    def __init__(self, language, tolowercase, lemmatizer, removepunct, removesinglechartoken):
         self.tolowercase = tolowercase
         self.lemmatizer = lemmatizer
         self.language = language
@@ -23,6 +29,8 @@ class TextPreprocessor():
                 self.nlp = spacy.load(SPACY_FR_MODEL)
         elif self.lemmatizer == TREETAGGER_PREPROCESSOR:
             self.treetagger = treetaggerwrapper.TreeTagger(TAGLANG=self.language)
+        self.removepunct = removepunct
+        self.removesinglechartoken = removesinglechartoken
 
     def process_with_spacy(self, text):
         if self.language == LANG_EN:
@@ -43,10 +51,23 @@ class TextPreprocessor():
 
     def process(self, text):
         ptext = " ".join(text.split())  # Replace all runs of whitespace with a single whitespace
-        if self.tolowercase:
-            ptext = ptext.lower()
         if self.lemmatizer == SPACY_PREPROCESSOR:
             ptext = self.process_with_spacy(ptext)
         elif self.lemmatizer == TREETAGGER_PREPROCESSOR:
             ptext = self.process_with_treetagger(ptext)
+        tokens = ptext.split()
+        if self.removepunct:
+            tokens = [token for token in tokens if token.isalpha()]
+        if self.removesinglechartoken:
+            tokens = [token for token in tokens if len(token) > 1]
+        ptext = " ".join(tokens)
+        if self.tolowercase:
+            ptext = ptext.lower()
         return ptext
+
+if __name__ == "__main__":
+    #text = "Cour d'appel, Bastia, Chambre civile A, 18 Mai 2016 – n° 14/00506"
+    text = "président -------------------------------------------------------------------------------- décision antérieur lyon juger de le exécution"
+    tp = TextPreprocessor(language=LANG_FR, tolowercase=True, lemmatizer=TREETAGGER_PREPROCESSOR,
+                          removepunct=True, removesinglechartoken=True)
+    print(tp.process(text))

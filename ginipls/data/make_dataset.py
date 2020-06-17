@@ -5,6 +5,7 @@ from os.path import isdir, isfile, join
 import pandas as pd
 import csv
 import pickle
+import random
 import unidecode # remove accents from str
 import shutil # copy files
 from ginipls.features.build_features import TF_IDF, TF_CHI2, InputError
@@ -12,6 +13,9 @@ from ginipls.features.build_features import TFIDF_SCHEME_NAME,TFCHI2_SCHEME_NAME
 from ginipls.data.preprocess import TextPreprocessor, LANG_FR, LANG_EN, TREETAGGER_PREPROCESSOR, SPACY_PREPROCESSOR
 from ginipls.config import GLOBAL_LOGGER as logger
 
+ID_COL = "@id"
+LABEL_COL = "@label"
+TEXT_COL = "@text"
 
 def collect_labels_docsfpaths(root='.'):
     """
@@ -42,6 +46,7 @@ def read_texts_file_to_texts_labels_lists(texts_csv_fpath, index_col = "@id", la
 
 def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, out_vectors_fpath, index = None, labels=None, label_col="@label"):
   """"""
+  os.makedirs(os.path.dirname(out_vectors_fpath), exist_ok=True)
   V = list(vocabulary)
   if index is None:
     index = range(len(texts_words_weights))
@@ -59,6 +64,7 @@ def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, 
 
 def fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ngram_nmax):
   logger.info("Fitting the %s" % vsm_scheme)
+  os.makedirs(os.path.dirname(vsm_fpath), exist_ok=True)
   if vsm_scheme == TFIDF_SCHEME_NAME:
     vsm = TF_IDF(ngram_nmin, ngram_nmax)
   elif vsm_scheme == TFCHI2_SCHEME_NAME:
@@ -72,6 +78,105 @@ def fit_vsm_from_texts_file(texts, labels, vsm_fpath, vsm_scheme, ngram_nmin, ng
   logger.info("%s saved at %s" % (vsm_scheme, vsm_fpath))
   return vsm
 
+
+@click.group(help="Organize a dataset into folds")
+def form_evaluation_data():
+    pass
+
+
+@form_evaluation_data.command(help="from file with at least the column @label; each label dataset is split into nfolds subsets, and the corresponding subsets of the labes are merged to create folds")
+@click.argument('nfolds', type=int)
+@click.argument('in_datasetfilename', type=click.Path(exists=True))
+@click.argument('dest_dirname', type=click.Path())
+# python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file 4 data/interim/taj-sens-resultat-pp/acpa.tsv data/interim/taj-sens-resultat-cv
+def cv_traintest_from_dataset_file(nfolds, in_datasetfilename, dest_dirname):
+    os.makedirs(dest_dirname, exist_ok=True)
+    datasetname = os.path.basename(in_datasetfilename).split('.')[0]
+    with open(in_datasetfilename, 'r', encoding='utf-8') as csvfile:
+        sr_lines = {}
+        csvreader = csv.reader(csvfile, delimiter='\t')
+        is_header_row = True
+        for row in csvreader:
+            if is_header_row:
+                header_row = row
+                lcn = row.index(LABEL_COL)
+                label_colnum = lcn if lcn is not None else 1
+                icn = row.index(ID_COL)
+                id_colnum = icn if icn is not None else 0
+                is_header_row = False
+                continue
+            sr = row[label_colnum]
+            if not sr in sr_lines:
+                sr_lines[sr] = list()
+            sr_lines[sr].append(row)
+        sr_folds = {}
+        for sr in sr_lines:
+            random.shuffle(sr_lines[sr])
+            sr_folds[sr] = {}
+            for k in range(nfolds):
+                sr_folds[sr][k] = list()
+            k = 0
+            for line in sr_lines[sr]:
+                sr_folds[sr][k % nfolds].append(line)
+                k += 1
+        for k in range(nfolds):
+            trainfilename = os.path.join(dest_dirname, "".join([datasetname, '_cv%d_train.tsv' % k]))
+            testfilename = os.path.join(dest_dirname, "".join([datasetname, '_cv%d_test.tsv' % k]))
+            with open(testfilename, 'w', encoding='utf-8') as fw:
+                fw.write("\t".join(header_row) + '\n')
+                for sr in sr_folds:
+                    fw.write("\n".join(["\t".join(row) for row in sr_folds[sr][k]]) + '\n')
+            with open(trainfilename, 'w', encoding='utf-8') as fw:
+                fw.write("\t".join(header_row) + '\n')
+                for sr in sr_folds:
+                    for k2 in range(nfolds):
+                        if k2 == k:
+                            continue
+                        fw.write("\n".join(["\t".join(row) for row in sr_folds[sr][k2]]) + '\n')
+
+@form_evaluation_data.command(help="from file with at least the column @label; each label dataset is split into nfolds subsets, and the corresponding subsets of the labes are merged to create folds")
+@click.argument('nfolds', type=int)
+@click.argument('in_datasetfilename', type=click.Path(exists=True))
+@click.argument('dest_dirname', type=click.Path())
+# python -m ginipls.data.make_dataset form-evaluation-data folds-from-dataset-file 4 data/interim/taj-sens-resultat-pp/acpa.tsv data/interim/taj-sens-resultat-folds
+def folds_from_dataset_file(nfolds, in_datasetfilename, dest_dirname):
+    os.makedirs(dest_dirname, exist_ok=True)
+    datasetname = os.path.basename(in_datasetfilename).split('.')[0]
+    with open(in_datasetfilename, 'r', encoding='utf-8') as csvfile:
+        sr_lines = {}
+        csvreader = csv.reader(csvfile, delimiter='\t')
+        is_header_row = True
+        for row in csvreader:
+            if is_header_row:
+                header_row = row
+                lcn = row.index(LABEL_COL)
+                label_colnum = lcn if lcn is not None else 1
+                icn = row.index(ID_COL)
+                id_colnum = icn if icn is not None else 0
+                is_header_row = False
+                continue
+            sr = row[label_colnum]
+            if not sr in sr_lines:
+                sr_lines[sr] = list()
+            sr_lines[sr].append(row)
+        sr_folds = {}
+        for sr in sr_lines:
+            random.shuffle(sr_lines[sr])
+            sr_folds[sr] = {}
+            for k in range(nfolds):
+                sr_folds[sr][k] = list()
+            k = 0
+            for line in sr_lines[sr]:
+                sr_folds[sr][k%nfolds].append(line)
+                k+=1
+        print({sr: [[r[id_colnum] for r in sr_folds[sr][k]] for k in range(nfolds)] for sr in sr_folds})
+        for k in range(nfolds):
+            foldfilename = os.path.join(dest_dirname, "".join([datasetname, str(k), '.tsv']))
+            print(foldfilename)
+            with open(foldfilename, 'w', encoding='utf-8') as fw:
+                fw.write("\t".join(header_row)+'\n')
+                for sr in  sr_folds:
+                    fw.write("\n".join(["\t".join(row) for row in sr_folds[sr][k]])+'\n')
 
 @click.group(help="select specific data")
 def select_data():
@@ -130,8 +235,7 @@ def taj_sens_resultat_data(object, norm, in_decisions_dir, claims_annotations_cs
 @click.option('--text_col', type=str, help='texts content column name[optional]', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 def vectorize(in_datasetfilename, vsm_fpath, out_vectorsfilename, vsm_scheme, ngram_nmin, ngram_nmax, label_col, index_col, text_col, col_sep):
-    # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_train0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_train0_tf-idf_1-2grams.tsv
-    # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_test0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_test0_tf-idf_1-2grams.tsv
+    # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tfidf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/taj-sens-resultat-cv/acpa_cv0_train.tsv data/models/taj-sens-resultat/acpa_cv0.tfidf data/processed/taj-sens-resultat/acpa_cv0_train_tfidf12.tsv
     logger.info('building %s vectors from %s' % (vsm_scheme, in_datasetfilename))
     index, texts, labels = read_texts_file_to_texts_labels_lists(in_datasetfilename, index_col, label_col, text_col, col_sep)
     if os.path.isfile(vsm_fpath): # le modèle est déjà construit
@@ -154,13 +258,15 @@ def preprocess():
 @click.option('--language', type=str, default=LANG_FR, help='texts language (%s, %s)' % (LANG_FR, LANG_EN), show_default=True)
 @click.option('--lowercase/--no-lowercase', default=True, show_default=True)
 @click.option('--lemmatizer', default=None, help=" ".join([SPACY_PREPROCESSOR, TREETAGGER_PREPROCESSOR]), show_default=True)
-def preprocess_taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatizer):
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/acpa data/interim/taj-sens-resultat/acpa.tsv
+@click.option('--removepunct/--no-removepunct', help="remove punctuation and numbers", default=True, show_default=True)
+@click.option('--removesinglechartoken/--no-removesinglechartoken', default=True, show_default=True)
+def preprocess_taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatizer, removepunct, removesinglechartoken):
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/acpa data/interim/taj-sens-resultat-pp/acpa.tsv
     os.makedirs(os.path.dirname(out_datasetfilename), exist_ok=True)
-    text_preprocessor = TextPreprocessor(language, lowercase, lemmatizer)
+    text_preprocessor = TextPreprocessor(language, lowercase, lemmatizer, removepunct, removesinglechartoken)
     labels_docsfpaths = collect_labels_docsfpaths(root=in_datasetdirname)
     with open(out_datasetfilename, "w", encoding='utf-8') as fw:
-        fw.write("@id\t@label\t@text\n")
+        fw.write("\t".join([ID_COL, LABEL_COL, TEXT_COL])+'\n')
         for label in labels_docsfpaths:
             for fpath in labels_docsfpaths[label]:
                 with open(fpath, "r", encoding='utf-8') as f:
@@ -175,6 +281,7 @@ def cli(logging):
     logger.disabled = (not logging)
 
 
+cli.add_command(form_evaluation_data)
 cli.add_command(select_data)
 cli.add_command(preprocess)
 cli.add_command(vectorize)
