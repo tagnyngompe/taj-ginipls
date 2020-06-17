@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/data/data_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/data_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/experiments/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/predict_taj_sens_resultat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/models/ginipls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/models/ginipls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592401639164</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="from data processing to evaluation">
+      <created>1592404909863</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1592404909863</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -243,10 +247,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="603" y="306" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1592372934023" />
-    <state x="410" y="60" width="912" height="911" key="CommitChangelistDialog2" timestamp="1592401637999">
+    <state x="410" y="60" width="912" height="911" key="CommitChangelistDialog2" timestamp="1592404908707">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="410" y="60" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592401637999" />
+    <state x="410" y="60" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592404908707" />
     <state x="343" y="86" width="912" height="911" key="CommitChangelistDialog2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927094827" />
     <state x="689" y="283" width="424" height="491" key="FileChooserDialogImpl" timestamp="1592380057424">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -288,10 +292,10 @@
     <state x="86" y="85" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592380234537" />
     <state x="72" y="111" key="SettingsEditor/0.27.1608.1023@0.27.1608.1023" timestamp="1591908690677" />
     <state x="298" y="206" width="1022" height="737" key="SettingsEditor/0.27.1610.1023@0.27.1610.1023" timestamp="1589234055564" />
-    <state x="476" y="251" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1592401648224">
+    <state x="476" y="251" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1592404911131">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="476" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592401648224" />
+    <state x="476" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592404911131" />
     <state x="399" y="274" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927384866" />
     <state width="805" height="511" key="XDebugger.FullValuePopup" timestamp="1589234509169">
       <screen x="0" y="27" width="1610" height="1023" />

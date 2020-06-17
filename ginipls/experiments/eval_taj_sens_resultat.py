@@ -3,7 +3,7 @@ import sys
 import itertools
 from ginipls.models.ginipls import PLS_VARIANT
 from ginipls.data.data_utils import load_ytrue_ypred_file
-from sklearn.metrics import f1_score, accuracy_score
+from sklearn.metrics import f1_score, recall_score, precision_score
 
 def main(dmd_category, wd):
     nfolds = 4
@@ -33,6 +33,10 @@ def main(dmd_category, wd):
                 ids += fold_ids
             #print(ids, ytrue, ypred)
             print("f1_score_macro = %.3f" % f1_score(ytrue, ypred, average='macro'))
+            print("recall_score_macro = %.3f" % recall_score(ytrue, ypred, average='macro'))
+            print("precision_score_macro = %.3f" % precision_score(ytrue, ypred, average='macro'))
+            errors = ['%.3f' % (1 - x) for x in recall_score(y_true=ytrue, y_pred=ypred, average=None)]
+            print("errors = %s" % str(errors))
 
 
 if __name__ == "__main__":
