@@ -145,7 +145,7 @@ def load_ytrue_ypred_file(y_file_name, indexCol="docId", yTrueCol="y_true", yPre
             header_row_num = 'infer'
         data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
         logger.debug("data=%s" % str(data))
-        ids = data.index.values.tolist() if indexCol is None else None #data[indexCol].tolist()
+        ids = data.index.values.tolist() if indexCol is None else data[indexCol].tolist()
         #print("ids", ids)
         columns = data.columns.values.tolist()
         if yTrueCol is None or yPredCol is None:

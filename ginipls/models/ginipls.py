@@ -532,7 +532,7 @@ class PLS():
         y_pred[i] = 1
       else :
         y_pred[i] = 0
-    return [y for y in np.asarray(y_pred.T)[0,:]]
+    return [int(y) for y in np.asarray(y_pred.T)[0,:]]
     
   def transform(self, X_test):
     """
