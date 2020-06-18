@@ -18,12 +18,12 @@ def main(dmd_category, wd):
     col_sep = '\t'
 
     for lw, gw, pls_type in itertools.product(local_weights, global_weights, pls_types):
-        print("Evaluation %s on %s%s" % (pls_type, lw, gw))
+        #print("Evaluation %s on %s%s" % (pls_type, lw, gw))
         for datasplit in ['train', 'test']:
             ytrue = list()
             ypred = list()
             ids = list()
-            print("[ %s ]" % datasplit)
+            #print("[ %s ]" % datasplit)
             for id_fold in range(nfolds):
                 fbasename = "%s_cv%d_%s_%s%s%d%d" % (dmd_category, id_fold, datasplit, lw, gw, nmin_ngram, nmaxngram)
                 predfilename = os.path.join(predictions_dir, fbasename + '-%s.tsv' % str(pls_type.name).lower())
@@ -32,11 +32,12 @@ def main(dmd_category, wd):
                 ypred += fold_ypred
                 ids += fold_ids
             #print(ids, ytrue, ypred)
-            print("f1_score_macro = %.3f" % f1_score(ytrue, ypred, average='macro'))
-            print("recall_score_macro = %.3f" % recall_score(ytrue, ypred, average='macro'))
-            print("precision_score_macro = %.3f" % precision_score(ytrue, ypred, average='macro'))
-            errors = ['%.3f' % (1 - x) for x in recall_score(y_true=ytrue, y_pred=ypred, average=None)]
-            print("errors = %s" % str(errors))
+            f1 = f1_score(ytrue, ypred, average='macro')
+            r = recall_score(ytrue, ypred, average='macro')
+            p = precision_score(ytrue, ypred, average='macro')
+            errors = [float('%.3f' % (1 - x)) for x in recall_score(y_true=ytrue, y_pred=ypred, average=None)]
+            print("%s, vecteurs=%s%s, %sPLS, %s, rappel_score_macro = %.3f, precision_score_macro = %.3f, f1_score_macro = %.3f, erreurs = %s" %
+                  (dmd_category, lw, gw, pls_type.name, datasplit, r,p,f1, str(errors)) )
 
 
 if __name__ == "__main__":

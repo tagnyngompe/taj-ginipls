@@ -19,15 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" afterDir="false" />
+    <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="customize k_fold split for hyperparameters">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/__main__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/data/make_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/data/make_taj_sens_resultat_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_taj_sens_resultat_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/experiments/cv_traintest_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/cv_traintest_taj_sens_resultat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/features/build_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/features/build_features.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/eval_taj_sens_resultat.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,10 +337,11 @@
     <state x="86" y="85" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592380234537" />
     <state x="72" y="111" key="SettingsEditor/0.27.1608.1023@0.27.1608.1023" timestamp="1591908690677" />
     <state x="298" y="206" width="1022" height="737" key="SettingsEditor/0.27.1610.1023@0.27.1610.1023" timestamp="1589234055564" />
-    <state x="476" y="251" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1592406351671">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2396" y="251" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1592473930814">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="476" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592406351671" />
+    <state x="2396" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592473930814" />
     <state x="399" y="274" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1608.1023@0.27.1608.1023" timestamp="1591927384866" />
     <state width="805" height="511" key="XDebugger.FullValuePopup" timestamp="1589234509169">
       <screen x="0" y="27" width="1610" height="1023" />
@@ -356,6 +351,10 @@
       <screen x="0" y="27" width="1610" height="1023" />
     </state>
     <state x="461" y="366" key="com.intellij.ide.util.TipDialog/0.27.1610.1023@0.27.1610.1023" timestamp="1587743402925" />
+    <state x="2590" y="308" key="git4idea.merge.GitPullDialog" timestamp="1592472325019">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2590" y="308" key="git4idea.merge.GitPullDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592472325019" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1592383247989">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
