@@ -64,7 +64,7 @@ def main(dmd_category, wd):
 
 
 if __name__ == "__main__":
-    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data/taj-sens-resultat
+    # python -m ginipls.experiments.cv_trainpython -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data/taj-sens-resultattest_taj_sens_resultat acpa data/taj-sens-resultat
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     main(demand_category, wd)

@@ -1,3 +1,4 @@
+import traceback
 from collections import Counter
 from math import log, sqrt
 from ginipls.config import GLOBAL_LOGGER as logger
@@ -37,9 +38,14 @@ class VSM:
     self.df_min = df_min
   @staticmethod
   def ngrams(text, n):
-    text = text.split()
-    #logger.debug('text = %s' % text)
-    return [" ".join(text[i:i+n]) for i in range(len(text)-n+1)]
+    try:
+      text = text.split()
+      #logger.debug('text = %s' % text)
+      return [" ".join(text[i:i+n]) for i in range(len(text)-n+1)]
+    except Exception:
+      print(text)
+      print(traceback.format_exc())
+      exit()
   def convert_text_to_words_list(self,text):
     return [an_ngram for n in range(self.ngram_nmin, self.ngram_nmax+1) for an_ngram in VSM.ngrams(text, n)]
   @staticmethod
@@ -94,7 +100,7 @@ class TF_IDF(VSM):
     self.select_vocabulary(texts)
     self.words_gweights = {w : log( N / df ) for w, df in VSM.count_words_doc_freq_in_texts(texts_words).items() if w in self.vocab_}
     self.clean_vocab()
-    logger.info("self.vocab_ = %s" % str(self.vocab_))
+    logger.debug("self.vocab_ = %s" % str(self.vocab_))
   def compute_local_weights(self, text):
     return self.compute_tf_weights(text)
 
@@ -154,7 +160,7 @@ class TF_CHI2(VSM):
     logger.debug('chi2wc%s' % str(chi2wc))
     self.words_gweights = {w : max(chi2wc[w].values()) for w in self.vocab_}
     self.clean_vocab()
-    logger.info("self.vocab_ = %s" % str(self.vocab_))
+    logger.debug("self.vocab_ = %s" % str(self.vocab_))
     #logger.debug('self.words_gweights', self.words_gweights) 
   def compute_local_weights(self, text):
     return self.compute_tf_weights(text)

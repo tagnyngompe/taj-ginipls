@@ -266,12 +266,12 @@ def preprocess():
 @click.option('--removepunct/--no-removepunct', help="remove punctuation and numbers", default=True, show_default=True)
 @click.option('--removesinglechartoken/--no-removesinglechartoken', default=True, show_default=True)
 def preprocess_taj_sens_resultat(in_datasetdirname, out_datasetfilename, language, lowercase, lemmatizer, removepunct, removesinglechartoken):
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/acpa data/interim/taj-sens-resultat-pp/acpa.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/concdel data/interim/taj-sens-resultat-pp/concdel.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/danais data/interim/taj-sens-resultat-pp/danais.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/dcppc data/interim/taj-sens-resultat-pp/dcppc.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/doris data/interim/taj-sens-resultat-pp/doris.tsv
-    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj_sens_resultat/styx data/interim/taj-sens-resultat-pp/styx.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/acpa data/interim/taj-sens-resultat-pp/acpa.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/concdel data/interim/taj-sens-resultat-pp/concdel.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/danais data/interim/taj-sens-resultat-pp/danais.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/dcppc data/interim/taj-sens-resultat-pp/dcppc.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/doris data/interim/taj-sens-resultat-pp/doris.tsv
+    # python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger data/raw/taj-sens-resultat/styx data/interim/taj-sens-resultat-pp/styx.tsv
     os.makedirs(os.path.dirname(out_datasetfilename), exist_ok=True)
     text_preprocessor = TextPreprocessor(language, lowercase, lemmatizer, removepunct, removesinglechartoken)
     labels_docsfpaths = collect_labels_docsfpaths(root=in_datasetdirname)
@@ -300,8 +300,8 @@ if __name__ == '__main__':
     cli()
 
 # preprocess taj-sens-resultat dataset
-# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/train0 data/interim/acpa_train0.tsv
-# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj_sens_resultat/acpa/test0 data/interim/acpa_test0.tsv
+# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj-sens-resultat/acpa/train0 data/interim/acpa_train0.tsv
+# python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat data/raw/taj-sens-resultat/acpa/test0 data/interim/acpa_test0.tsv
 # vectorize texts files into matrices
 # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_train0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_train0_tf-idf_1-2grams.tsv
 # python -m ginipls.data.make_dataset --logging vectorize --vsm_scheme=tf-idf --label_col=@label --index_col=@id --text_col=@text --ngram_nmax=2 data/interim/acpa_test0.tsv data/models/acpa_train0_tf-idf_1-2grams.model data/processed/acpa_test0_tf-idf_1-2grams.tsv

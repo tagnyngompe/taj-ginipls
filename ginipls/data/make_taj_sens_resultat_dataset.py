@@ -19,8 +19,8 @@ def main(dmd_category, wd):
     models_path = os.path.join(wd, 'models')
     #_dirpath = os.join(wd, 'pp')
     #os.system('''python -m ginipls.data.make_dataset select-data taj-sens-resultat-data "amende civile" "32-1 code de procédure civile + 559 code de procédure civile : pour procédure abusive" data/raw/txt-all/acpa data/raw/CASSANDRA.tsv data/raw/txt-oneclaim/acpa''')
-    #os.system('python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger %s %s' % (raw_path, preprocessed_path))
-    #os.system('python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file %d %s %s' % (nfolds, preprocessed_path, cv_path))
+    os.system('python -m ginipls.data.make_dataset --logging preprocess taj-sens-resultat --language=fr --lowercase --lemmatizer=treetagger %s %s' % (raw_path, preprocessed_path))
+    os.system('python -m ginipls.data.make_dataset form-evaluation-data cv-traintest-from-dataset-file %d %s %s' % (nfolds, preprocessed_path, cv_path))
     for k, lw, gw in itertools.product(range(nfolds), local_weights, global_weights):
         for datasplit in ['train', 'test']:
             splittextdatapath = os.path.join(cv_path, '%s_cv%d_%s.tsv' %(dmd_category, k, datasplit))

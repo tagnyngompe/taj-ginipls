@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="customize k_fold split for hyperparameters">
+    <list default="true" id="3d764b39-1c95-4ed1-bfb9-83cd0308d0b8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/taj-ginilogitpls.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ginipls/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/data/make_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/data/make_taj_sens_resultat_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/data/make_taj_sens_resultat_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ginipls/experiments/cv_traintest_taj_sens_resultat.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/experiments/cv_traintest_taj_sens_resultat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ginipls/models/hyperparameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/models/hyperparameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginipls/features/build_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginipls/features/build_features.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,19 +59,19 @@
     <property name="terminalCustomCommandExecutionTurnOff" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Corsair\GitHub\taj-ginipls\data\taj_sens_resultat\raw" />
+      <recent name="C:\Users\Corsair\GitHub\taj-ginipls\data" />
+      <recent name="$PROJECT_DIR$/data/processed" />
+      <recent name="$PROJECT_DIR$/src/experiments/learning" />
+      <recent name="$PROJECT_DIR$/reports" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Corsair\GitHub\taj-ginipls\data\raw\txt-all\doris" />
       <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/test0" />
       <recent name="$PROJECT_DIR$/data/raw/taj_sens_resultat/acpa/train0" />
       <recent name="$PROJECT_DIR$/ginipls/data" />
       <recent name="$PROJECT_DIR$/data/processed" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data/processed" />
-      <recent name="$PROJECT_DIR$/src/experiments/learning" />
-      <recent name="$PROJECT_DIR$/reports" />
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="Python.hyperparameters">
@@ -251,6 +273,18 @@
     </task>
     <option name="localTasksCounter" value="8" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="make dataset and preprocesed text datasets" />
