@@ -2,6 +2,7 @@ import click
 import os
 import pickle
 import datetime
+import multiprocessing
 from sklearn.metrics import f1_score, accuracy_score
 from ginipls.data.data_utils import load_data, save_y_in_file, save_ytrue_and_ypred_in_file, load_ytrue_ypred_file
 from ginipls.models.ginipls import PLS, PLS_VARIANT
@@ -33,7 +34,10 @@ def cast_click_list(value):
 
 def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfolds, nu_range, n_components_range, only_the_first_fold):
   """"""
-  best_nu, best_n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X_train, y_train, nu_range, n_components_range, hyerparameters_selection_nfolds, only_the_first_fold=only_the_first_fold)
+  best_nu, best_n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X_train, y_train, nu_range,
+                                                                   n_components_range, hyerparameters_selection_nfolds,
+                                                                   only_the_first_fold=only_the_first_fold,
+                                                                   nb_threads=multiprocessing.cpu_count())
   logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (best_nu, best_n_comp))
   gpls = PLS(pls_type=pls_type, nu=best_nu, n_components=best_n_comp)
   gpls.fit(X_train, y_train)
@@ -140,6 +144,7 @@ def test_on_vectors(trainfilename, classifierfilename, label_col, index_col, col
 def evaluate():
     pass
 
+# TODO : corriger cette évaluation
 @evaluate.command('f1', help="estimate the F1-score on two Y vectors stored in predfilename (ytrue, ypred)")
 @click.argument('predfilename', type=click.Path(exists=True))
 @click.option('--index_col', type=str, default=None, help='texts ids column name [optional]', show_default=True, required=False)

@@ -46,7 +46,7 @@ def load_data(data, output_col=0, index_col=None,
         if not os.path.exists(data):
             logger.error("Error: data_utils.load_data", data, "not found!")
             raise FileExistsError
-        data = pd.read_csv(filepath_or_buffer=data, sep=col_sep, header=header_row_num)
+        data = pd.read_csv(filepath_or_buffer=data, sep=col_sep, header=header_row_num, encoding="utf-8")
         #data.sample(frac=1)
         # Tri des matrices avec pandas
     if sort_output and not output_col is None:

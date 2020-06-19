@@ -96,7 +96,7 @@ class PLS():
     """Convert the 2 labels used in y (the expected output) into {0,1}"""
     labels = list(set(y))
     sorted(labels)
-    logger.debug("labels codes : %s" % str({labels[i]:i for i in range(len(labels))}))
+    #logger.debug("labels codes : %s" % str({labels[i]:i for i in range(len(labels))}))
     return np.asarray([labels.index(i) for i in y])
     
   def __init_variables(self, X_train, y_train):

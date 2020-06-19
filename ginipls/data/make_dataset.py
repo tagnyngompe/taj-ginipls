@@ -44,7 +44,8 @@ def read_texts_file_to_texts_labels_lists(texts_csv_fpath, index_col = "@id", la
   return df.index.tolist(), df[text_col].tolist(), df[label_col].tolist()
 
 
-def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, out_vectors_fpath, index = None, labels=None, label_col="@label"):
+def save_texts_words_weights_as_vectors_in_csv(texts_words_weights, vocabulary, out_vectors_fpath, index = None,
+                                               labels=None, label_col="@label"):
   """"""
   os.makedirs(os.path.dirname(out_vectors_fpath), exist_ok=True)
   V = list(vocabulary)

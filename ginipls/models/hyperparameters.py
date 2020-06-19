@@ -1,13 +1,41 @@
 #TO RUN : python -m ginipls.models.hyperparameters
-import numpy as np
+import multiprocessing
+import queue
+import threading
 import random
 import traceback #for exception
 import itertools # for cartesian product of params ranges
-from sklearn.model_selection import KFold
-import os
+import numpy as np
+from ginipls.data.data_utils import load_data
 from ginipls.models.ginipls import PLS, PLS_VARIANT
 from ginipls.config import GLOBAL_LOGGER as logger
 
+NU_NAME = 'nu'
+N_COMP_NAME = 'n_comp'
+X_NAME = 'X'
+Y_NAME = 'y'
+PLS_TYPE_NAME = 'pls_type'
+TRAIN_TEST_SPLITS_INDEX_PLS_TYPE_NAME = 'train_test_splits_index'
+SCORE_NAME = 'score'
+
+
+class HyperparameterEvaluatorThread(threading.Thread):
+  def __init__(self, threadID, name, data_list):
+    threading.Thread.__init__(self)
+    self.threadID = threadID
+    self.name = name
+    self.data_list = data_list
+  def run(self):
+    logger.debug("Starting %s" % self.name)
+    self.process_data()
+    logger.debug("Exiting %s" % self.name)
+
+  def process_data(self):
+      for data in self.data_list:
+          logger.debug("%s processing nu_=%.3f, n_comp_=%d" % (self.name, data['nu'], data['n_comp']))
+          data[SCORE_NAME] = evaluate_hyperparameters_values(nu_=data[NU_NAME], n_comp_=data[N_COMP_NAME], pls_type=data[PLS_TYPE_NAME],
+                                                          X=data[X_NAME], y=data[Y_NAME],
+                                                          train_test_splits_index=data[TRAIN_TEST_SPLITS_INDEX_PLS_TYPE_NAME])
 
 def kf_split(ytrue, nfolds, shuffle=True):
   labels_index = {}
@@ -39,92 +67,121 @@ def kf_split(ytrue, nfolds, shuffle=True):
     traintest_splits.append((train_index, test_index))
   return traintest_splits
 ## DIY : sklearn.kfold + for(nu_range) + fit + score
-def select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds, best_expectable_score=1., only_the_first_fold=False):
+
+def evaluate_hyperparameters_values(nu_, n_comp_, pls_type, X, y, train_test_splits_index):
+  params_str = 'nu=%.3f, n_comp_=%d' % (nu_, n_comp_)
+  n_folds = len(train_test_splits_index)
+  mean_score = 0.
+  fold_id = 0
+  n_valid_folds = 0
+  for train_index, test_index in train_test_splits_index:
+    try:
+      logger.debug("[%s] [fold %d] TRAIN: %s, TEST: %s" % (params_str, fold_id, str(train_index), str(test_index)))
+      X_train, X_test = X[train_index], X[test_index]
+      y_train, y_test = y[train_index], y[test_index]
+      gpls = PLS(pls_type=pls_type, nu=nu_, n_components=n_comp_)
+      gpls.fit(X_train.tolist(), y_train.tolist())
+      fold_score = gpls.score(X_test.tolist(), y_test.tolist())
+      logger.debug("[%s] [fold %d] score = %.3f" % (params_str, fold_id, fold_score))
+      mean_score += fold_score
+    except Exception:
+      tb = traceback.format_exc()
+      logger.error("[%s] [fold %d] ERROR : %s" % (params_str, fold_id, tb))
+    else:
+      n_valid_folds += 1
+    finally:
+      fold_id += 1
+  # mean_score = mean_score / n_valid_folds if n_valid_folds > 0 else 0.
+  mean_score = mean_score / n_folds
+  logger.debug("[%s] [CV n_folds_without_error=%d] mean_score = %.3f" % (params_str, n_valid_folds, mean_score))
+  return mean_score
+
+def select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds,
+                                              only_the_first_fold=False, nb_threads=1):
   """"""
-  # TO SEE THE FOLDS SCORES : grep -nr '\[nu=1.700, n_comp_=5\].*score' taj-ginipls.log
+  X = np.asarray(X)  # pour kf.split(X)
+  y = np.asarray(y)
   logger.debug('nu_range = %s'% str(nu_range))
   logger.debug('n_components_range =%s'% str(n_components_range))
-  X = np.asarray(X) #pour kf.split(X)
-  y = np.asarray(y)
-  best_mean_score = 0.
-  best_nu_ = 0.
-  best_n_comp_ = 0.
+  best_score, best_nu_, best_n_comp_ = 0., 0., 0.
   train_test_splits_index = kf_split(ytrue=y, nfolds=n_folds, shuffle=True)
-  n_folds = len(train_test_splits_index)
-  # kf = KFold(n_splits=n_folds, shuffle=True)
-  # kf.get_n_splits(X)
-  # train_test_splits_index = [(train_index, test_index) for train_index, test_index in kf.split(X)]
   if only_the_first_fold:
     train_test_splits_index = train_test_splits_index[:1]
     logger.info("Running only on the fold 0 of the %d folds cross-validation" % n_folds)
-    n_folds = 1 # to avoid the mean over folds that didn't run
   else:
     logger.info("Running on all of the %d folds of the cross-validation" % n_folds)
-  for nu_, n_comp_  in itertools.product(nu_range, n_components_range):
-    params_str = 'nu=%.3f, n_comp_=%d' % (nu_,n_comp_)
-    mean_score = 0.
-    fold_id = 0
-    n_valid_folds = 0
-    for train_index, test_index in train_test_splits_index:
-      try:        
-        logger.debug("[%s] [fold %d] TRAIN: %s, TEST: %s" % (params_str, fold_id, str(train_index), str(test_index)))
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
-        gpls = PLS(pls_type=pls_type, nu=nu_, n_components=n_comp_)
-        gpls.fit(X_train.tolist(), y_train.tolist())
-        fold_score = gpls.score(X_test.tolist(), y_test.tolist())        
-        logger.debug("[%s] [fold %d] score = %.3f" % (params_str, fold_id, fold_score))
-        mean_score += fold_score
-      except Exception:
-        tb = traceback.format_exc()
-        logger.error("[%s] [fold %d] ERROR : %s" % (params_str, fold_id, tb))
-      else:
-        n_valid_folds += 1
-      finally:
-        fold_id += 1
-      #break
-    #mean_score = mean_score / n_valid_folds if n_valid_folds > 0 else 0.
-    mean_score = mean_score / n_folds
-    logger.debug("[%s] [CV n_folds_without_error=%d] mean_score = %.3f" % (params_str,n_valid_folds,mean_score))
-    if best_mean_score < mean_score:
-      best_mean_score = mean_score
-      best_nu_ = nu_
-      best_n_comp_ = n_comp_
-      logger.info("got a better score (f1_score = %.3f) with nu_==%.3f & n_comp_==%d" % (best_mean_score, best_nu_, best_n_comp_))
-    if best_mean_score == best_expectable_score:
-      break
-    #break
-  logger.info("best_score = %.3f (with nu_==%.3f & n_comp_==%d)" % (best_mean_score, best_nu_, best_n_comp_))
+  # create the data structures
+  #logger.info('train_test_splits_index : %s' % str(train_test_splits_index))
+  #exit()
+  threads_datalists = [list() for i in range(nb_threads)]
+  i = 0
+  for nu_, n_comp_ in itertools.product(nu_range, n_components_range):
+    data = {}
+    data[NU_NAME] = nu_
+    data[N_COMP_NAME] = n_comp_
+    data[PLS_TYPE_NAME] = pls_type
+    data[X_NAME] = X.copy()
+    data[Y_NAME] = y.copy()
+    data[TRAIN_TEST_SPLITS_INDEX_PLS_TYPE_NAME] = train_test_splits_index
+    threads_datalists[i%nb_threads].append(data)
+    i+=1
+  # for i in range(nb_threads):
+  #   print(i, [(data[NU_NAME], data[N_COMP_NAME]) for data in threads_datalists[i]])
+  # create and named threads
+  threads = list()
+  thread_id = 1
+  for i in range(nb_threads):
+    t_name = 'Thread-%d' % i
+    thread = HyperparameterEvaluatorThread(thread_id, t_name, threads_datalists[i])
+    thread.start()
+    threads.append(thread)
+    thread_id += 1
+  # Wait for all threads to complete
+  for t in threads:
+    t.join()
+  logger.info("Exiting Main Hyperparameter Estimator Thread")
+  for i in range(nb_threads):
+    for data in threads_datalists[i]:
+      if best_score < data[SCORE_NAME]:
+        best_nu_, best_n_comp_, best_score = data[NU_NAME],data[N_COMP_NAME], data[SCORE_NAME]
+        print("score(nu=%.3f,n_comp=%d)=%.3f" % (data[NU_NAME],data[N_COMP_NAME], data[SCORE_NAME]))
+
+  logger.info("best_score = %.3f (with nu_==%.3f & n_comp_==%d)" % (best_score, best_nu_, best_n_comp_))
   return best_nu_, best_n_comp_
 
 
-# if __name__ == "__main__":
-#   pls_type = PLS_VARIANT.GINI
-#   from sklearn import datasets
-#   iris = datasets.load_iris()
-#   y = iris.target[50:] # classe{2,3}
-#   X = iris.data[50:]
-#
-#   X_train_sm=[[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .97], [0.0, 4.0, 5.0, 4, .1235, 2.58], [4.0, 0.0, 7.0, 4, 10, 4.78], [4.0, 1.0, 8.0, 4, 1, 5], [1.5, 1.3, 1.1, 4, 7, 6]]
-#   y_train_sm=[0, 0, 0, 1, 1, 1]
-#   #X = X_train_sm
-#   #y = y_train_sm
-#
-#   nu_min = 1
-#   nu_max = 2
-#   nu_step = 0.1
-#   nu_range = [i*nu_step for i in range(int(nu_min/nu_step),int(nu_max/nu_step))]
-#
-#
-#   n_components_min = 1
-#   n_components_max = min(10,len(X[0])) # nb de caractéristiques
-#   n_components_step = 1
-#   n_components_range = range(n_components_min, n_components_max, n_components_step)
-#
-#   n_folds=3
-#   nu, n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds)
-#   logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (nu, n_comp))
-  
-
 if __name__ == "__main__":
-  kf_split(ytrue=[0,0,1,0,1,1,1], nfolds=4, shuffle=True)
+  #python -m ginipls.models.hyperparameters
+  pls_type = PLS_VARIANT.GINI
+  from sklearn import datasets
+  iris = datasets.load_iris()
+  y = iris.target[50:] # classe{2,3}
+  X = iris.data[50:]
+
+  X_train_sm=[[2.0, 0.0, 7.0, 4, 5.2, 9.7], [3.0, 1.0, 5.0, 4, 1.0, .97], [0.0, 4.0, 5.0, 4, .1235, 2.58], [4.0, 0.0, 7.0, 4, 10, 4.78], [4.0, 1.0, 8.0, 4, 1, 5], [1.5, 1.3, 1.1, 4, 7, 6]]
+  y_train_sm=[0, 0, 0, 1, 1, 1]
+  #X = X_train_sm
+  #y = y_train_sm
+
+  train_data = "data/taj-sens-resultat/processed/acpa_cv0_train_tfidf12.tsv"
+  X_train, y_train, h, ids_train = \
+    load_data(
+      data=train_data, output_col='@label',
+      index_col="@id", col_sep="\t", header_row_num=0)
+  #X, y = X_train, y_train
+
+  nu_min = 1
+  nu_max = 3
+  nu_step = 0.1
+  nu_range = [i*nu_step for i in range(int(nu_min/nu_step),int(nu_max/nu_step))]
+
+
+  n_components_min = 1
+  n_components_max = min(10,len(X[0])) # nb de caractéristiques
+  n_components_step = 1
+  n_components_range = range(n_components_min, n_components_max+1, n_components_step)
+
+  n_folds=3
+  nu, n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X, y, nu_range, n_components_range, n_folds,
+                                                         only_the_first_fold=False, nb_threads=multiprocessing.cpu_count()-1)
+  logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (nu, n_comp))
