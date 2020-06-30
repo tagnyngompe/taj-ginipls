@@ -11,6 +11,7 @@ from ginipls.models.ginipls import PLS_VARIANT
 def main(dmd_category, wd):
     nfolds = 4
     matrices_dir = os.path.join(wd, 'processed')
+    print("matrices_dir", matrices_dir)
     assert os.path.isdir(matrices_dir)
     models_dir = os.path.join(wd, 'models')
     os.makedirs(models_dir, exist_ok=True)
@@ -18,7 +19,7 @@ def main(dmd_category, wd):
     os.makedirs(predictions_dir, exist_ok=True)
     local_weights = ['tf']
     global_weights = ['chi2', 'idf']
-    pls_types = [PLS_VARIANT.GINI]
+    pls_types = [PLS_VARIANT.LOGIT_GINI]
     labels = ['rejette', 'accepte']
     nmin_ngram, nmaxngram = 1, 2
 
@@ -28,13 +29,13 @@ def main(dmd_category, wd):
     nu_range = [i * nu_step for i in range(int(nu_min / nu_step), int(nu_max / nu_step))]
     #nu_range = [1.3]
 
-    n_components_min = 2
+    n_components_min = 1
     n_components_max = 5  # nb de caractéristiques
     n_components_step = 1
     n_components_range = range(n_components_min, n_components_max, n_components_step)
     #n_components_range = [2]
 
-    hyperparams_nfolds = 4
+    hyperparams_nfolds = 2
     crossval_hyperparam = True
 
     label_col='@label'
@@ -64,7 +65,7 @@ def main(dmd_category, wd):
 
 
 if __name__ == "__main__":
-    # python -m ginipls.experiments.cv_trainpython -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data/taj-sens-resultattest_taj_sens_resultat acpa data/taj-sens-resultat
+    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data\taj-sens-resultat
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     main(demand_category, wd)

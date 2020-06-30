@@ -10,7 +10,7 @@ def main(dmd_category, wd):
     predictions_dir = os.path.join(wd, 'predictions')
     local_weights = ['tf']
     global_weights = ['chi2', 'idf']
-    pls_types = [PLS_VARIANT.GINI]
+    pls_types = [PLS_VARIANT.LOGIT_GINI]
     nmin_ngram, nmaxngram = 1, 2
     ytrue_col = 'y_true'
     ypred_col = 'y_pred'

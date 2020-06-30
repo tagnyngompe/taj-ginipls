@@ -135,14 +135,10 @@ def load_evaluation_data(y_file_name, y_col=1, col_sep=DEFAULT_COL_SEP, header_r
     data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
     return data[y_col].tolist()
 
-def load_ytrue_ypred_file(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP):
+def load_ytrue_ypred_file(y_file_name, indexCol="docId", yTrueCol="y_true", yPredCol="y_pred", col_sep=DEFAULT_COL_SEP, header_row_num = 'infer'):
     """"""
     #print("data.utils.load_evaluation_data2: ", y_file_name)
     try:
-        if yTrueCol is None or yPredCol is None:
-            header_row_num = None
-        else:
-            header_row_num = 'infer'
         data = pd.read_csv(filepath_or_buffer=y_file_name, sep=col_sep, header=header_row_num)
         logger.debug("data=%s" % str(data))
         ids = data.index.values.tolist() if indexCol is None else data[indexCol].tolist()

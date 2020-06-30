@@ -6,7 +6,7 @@ import multiprocessing
 from sklearn.metrics import f1_score, accuracy_score
 from ginipls.data.data_utils import load_data, save_y_in_file, save_ytrue_and_ypred_in_file, load_ytrue_ypred_file
 from ginipls.models.ginipls import PLS, PLS_VARIANT
-from ginipls.models.hyperparameters import select_pls_hyperparameters_with_cross_val
+from ginipls.models.hyperparameters import select_pls_best_nu_then_best_n_comp
 from ginipls.config import GLOBAL_LOGGER as logger
 
 DEFAULT_PREDICTION_DIR = 'data/predictions'
@@ -15,7 +15,7 @@ DEFAULT_MODELS_DIR = 'models'
 
 def cast_click_list(value):
     try:
-        print('value = ', value, "type(value)", type(value))
+        #print('value = ', value, "type(value)", type(value))
         e = ""
         real_list = list()
         for c in value:
@@ -34,10 +34,9 @@ def cast_click_list(value):
 
 def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfolds, nu_range, n_components_range, only_the_first_fold):
   """"""
-  best_nu, best_n_comp = select_pls_hyperparameters_with_cross_val(pls_type, X_train, y_train, nu_range,
+  best_nu, best_n_comp = select_pls_best_nu_then_best_n_comp(pls_type, X_train, y_train, nu_range,
                                                                    n_components_range, hyerparameters_selection_nfolds,
-                                                                   only_the_first_fold=only_the_first_fold,
-                                                                   nb_threads=multiprocessing.cpu_count())
+                                                                   only_the_first_fold=only_the_first_fold)
   logger.info("selected hyperparameters : nu=%.3f, n_comp=%d" % (best_nu, best_n_comp))
   gpls = PLS(pls_type=pls_type, nu=best_nu, n_components=best_n_comp)
   gpls.fit(X_train, y_train)
@@ -47,9 +46,10 @@ def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfol
 
 def train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam):
     """python -m ginipls train on-vectors --label_col=category --index_col=@id --crossval_hyperparam  data\processed\doris0_CHI2_ATF-train.tsv"""
+    if not isinstance(nu_range[0], float):
+        nu_range = [float(x) for x in cast_click_list(nu_range)]
     if not isinstance(n_components_range[0], int):
         n_components_range = [int(x) for x in cast_click_list(n_components_range)]
-    click.echo('This is the on-vectors subcommand of the train command : nu_range=%s, n_components_range=%s' % (nu_range, n_components_range))
     X_train, y_train, headers, ids = load_data(data=trainfilename, output_col=label_col, index_col=index_col, col_sep=col_sep)
     clf = init_and_train_pls(X_train, y_train, pls_type, hyperparams_nfolds, nu_range, n_components_range, only_the_first_fold=not crossval_hyperparam)
     if classifierfilename is None:
@@ -99,7 +99,10 @@ def train():
 @click.option('--hyperparams_nfolds', type=int, default=3, help='nb of folds for the selection of hyperparameters by cross-validation', show_default=True)
 @click.option('--crossval_hyperparam/--no-crossval_hyperparam', default=False, help='run on all the fold or only on the first fold for the selection of hyperparameters', show_default=True)
 def on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam):
-    """python -m ginipls train on-vectors --label_col=category --index_col=@id --crossval_hyperparam  data\processed\doris0_CHI2_ATF-train.tsv"""
+    """python -m ginipls train on-vectors --pls_type=LOGIT_GINI --label_col=@label --index_col=@id --crossval_hyperparam  data\taj-sens-resultat\processed\acpa_cv0_t
+rain_tfchi212.tsv"""
+    logger.info('This is the on-vectors subcommand of the train command : nu_range=%s, n_components_range=%s' % (
+    nu_range, n_components_range))
     train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam)
 
 @train.command("on-texts", help="vectorize training texts then train on their vectors")
@@ -113,14 +116,15 @@ def apply():
     pass
     
 @apply.command('on-vectors', help="apply a trained pls on vectors and save outputs in outputfilename")
-@click.argument('vectorsfilename', type=click.Path(exists=True))
 @click.argument('classifierfilename', type=click.Path(exists=True))
+@click.argument('vectorsfilename', type=click.Path(exists=True))
 @click.argument('outputfilename', type=click.Path(), required=False)
 @click.option('--label_col', type=str, default=None, help='labels column name [optional]', show_default=True, required=False)
 @click.option('--index_col', type=str, default=None, help='texts ids column name[optional]', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 def on_vectors(vectorsfilename, classifierfilename, outputfilename, label_col, index_col, col_sep):
-    """python -m ginipls apply on-vectors --label_col=category --index_col=@id data\processed\doris0_CHI2_ATF-test.tsv models\2020-06-11_14-58-50_doris0_CHI2_ATF-train_GINIPLS.model"""
+    """python -m ginipls apply on-vectors --label_col=@label --index_col=@id models\2020-06-30_07-36-17_acpa_cv0_train_tfchi212_LOGIT_GINIPLS.model data\taj-sens-res
+ultat\processed\acpa_cv0_test_tfchi212.tsv"""
     apply_on_vectors(vectorsfilename, classifierfilename, outputfilename, label_col, index_col, col_sep)
 
 @apply.command('on-text', help="vectorize training texts then apply a trained pls on their vectors")
@@ -147,22 +151,23 @@ def evaluate():
 # TODO : corriger cette évaluation
 @evaluate.command('f1', help="estimate the F1-score on two Y vectors stored in predfilename (ytrue, ypred)")
 @click.argument('predfilename', type=click.Path(exists=True))
-@click.option('--index_col', type=str, default=None, help='texts ids column name [optional]', show_default=True, required=False)
-@click.option('--ytrue_col', type=str, default=None, help='column of expected output', show_default=True, required=False)
-@click.option('--ypred_col', type=str, default=None, help='column of predicted output', show_default=True, required=False)
+@click.option('--index_col', type=str, default="docId", help='texts ids column name [optional]', show_default=True, required=False)
+@click.option('--ytrue_col', type=str, default="y_true", help='column of expected output', show_default=True, required=False)
+@click.option('--ypred_col', type=str, default="y_pred", help='column of predicted output', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 def f1_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
     _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
-    test_f1_score = f1_score(y_true, y_pred, labels=[0,1], average='macro')
+    print("y_true, y_pred = ", y_true, y_pred)
+    test_f1_score = f1_score(y_true, y_pred, average='macro')
     if logger.disabled:
         print(test_f1_score)
     logger.info("test f1_score = %.3f" % (test_f1_score))
 
 @evaluate.command('accuracy', help="apply a trained pls on vectors")
 @click.argument('predfilename', type=click.Path(exists=True))
-@click.option('--index_col', type=str, default=None, help='texts ids column name [optional]', show_default=True, required=False)
-@click.option('--ytrue_col', type=str, default=None, help='column of expected output', show_default=True, required=False)
-@click.option('--ypred_col', type=str, default=None, help='column of predicted output', show_default=True, required=False)
+@click.option('--index_col', type=str, default="docId", help='texts ids column name [optional]', show_default=True, required=False)
+@click.option('--ytrue_col', type=str, default="y_true", help='column of expected output', show_default=True, required=False)
+@click.option('--ypred_col', type=str, default="y_pred", help='column of predicted output', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
 def accuracy_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
     _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
