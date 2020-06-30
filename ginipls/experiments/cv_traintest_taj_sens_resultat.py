@@ -1,11 +1,12 @@
 # crossvalidation evaluation script
-# python -m ginipls.experiments
+import datetime
 import itertools
 import os
 import sys
-from ginipls.config import GLOBAL_LOGGER as logger
-from ginipls.__main__ import train_on_vectors, apply_on_vectors
+from ginipls.__main__ import train_on_vectors, apply_on_vectors, evaluate, f1_score_on_prediction_file, \
+    accuracy_score_on_prediction_file
 from ginipls.models.ginipls import PLS_VARIANT
+from ginipls.config import GLOBAL_LOGGER as logger
 
 
 def main(dmd_category, wd):
@@ -58,16 +59,26 @@ def main(dmd_category, wd):
             classifierfilename = os.path.join(models_dir, classifierfbasename)
             logger.debug("classifierfilename = %s" % classifierfilename)
             # train
-            train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam)
+            if not os.path.isfile(classifierfilename):
+                train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam)
             # apply
             apply_on_vectors(trainfilename, classifierfilename, trainpredfilename, label_col, index_col, col_sep)
+            logger.info("APPLIED ON TRAIN DATA : F1 = %.3f, Accurracy = %.3f" % (
+                f1_score_on_prediction_file(trainpredfilename),
+                accuracy_score_on_prediction_file(trainpredfilename)
+            ))
             apply_on_vectors(testfilename, classifierfilename, testpredfilename, label_col, index_col, col_sep)
+            logger.info("APPLIED ON TEST DATA : F1 = %.3f, Accurracy = %.3f" % (
+                f1_score_on_prediction_file(testpredfilename),
+                accuracy_score_on_prediction_file(testpredfilename)
+            ))
 
 
 if __name__ == "__main__":
     # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data\taj-sens-resultat
-    demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
+    demand_category = sys.argv[1] if len(ys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
+    # logger = init_logging(log_file='.'.join([datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),demand_category, 'log']), append=False)
     main(demand_category, wd)
 
 

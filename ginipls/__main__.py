@@ -82,6 +82,13 @@ def apply_on_vectors(vectorsfilename, classifierfilename, outputfilename, label_
         save_y_in_file(row_index=ids_test, y=y_pred, y_file_name=outputfilename, col_sep=col_sep)
     logger.info("Predicted labels are saved at %s" % (outputfilename))
 
+def f1_score_on_prediction_file(predfilename, index_col="docId", ytrue_col="y_true", ypred_col="y_pred", col_sep="\t"):
+    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
+    return f1_score(y_true, y_pred, average='macro')
+
+def accuracy_score_on_prediction_file(predfilename, index_col="docId", ytrue_col="y_true", ypred_col="y_pred", col_sep="\t"):
+    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
+    return accuracy_score(y_true, y_pred)
 
 @click.group(help = "train models on labeled data")
 def train():
@@ -155,10 +162,8 @@ def evaluate():
 @click.option('--ytrue_col', type=str, default="y_true", help='column of expected output', show_default=True, required=False)
 @click.option('--ypred_col', type=str, default="y_pred", help='column of predicted output', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
-def f1_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
-    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
-    print("y_true, y_pred = ", y_true, y_pred)
-    test_f1_score = f1_score(y_true, y_pred, average='macro')
+def f1(predfilename, index_col, ytrue_col, ypred_col, col_sep):
+    test_f1_score = f1_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep)
     if logger.disabled:
         print(test_f1_score)
     logger.info("test f1_score = %.3f" % (test_f1_score))
@@ -169,9 +174,8 @@ def f1_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, c
 @click.option('--ytrue_col', type=str, default="y_true", help='column of expected output', show_default=True, required=False)
 @click.option('--ypred_col', type=str, default="y_pred", help='column of predicted output', show_default=True, required=False)
 @click.option('--col_sep', type=str, default="\t", help='column delimiter', show_default=True)
-def accuracy_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep):
-    _, y_true, y_pred = load_ytrue_ypred_file(y_file_name=predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
-    test_acc_score = accuracy_score(y_true, y_pred)
+def accuracy(predfilename, index_col, ytrue_col, ypred_col, col_sep):
+    test_acc_score = accuracy_score_on_prediction_file(predfilename, index_col, ytrue_col, ypred_col, col_sep)
     if logger.disabled:
         print(test_acc_score)
     logger.info("test accuracy_score = %.3f" % (test_acc_score))
