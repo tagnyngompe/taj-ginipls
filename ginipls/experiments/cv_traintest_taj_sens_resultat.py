@@ -18,11 +18,10 @@ def main(dmd_category, wd):
     os.makedirs(models_dir, exist_ok=True)
     predictions_dir = os.path.join(wd, 'predictions')
     os.makedirs(predictions_dir, exist_ok=True)
-    local_weights = ['tf']
-    global_weights = ['chi2', 'idf']
-    pls_types = [PLS_VARIANT.LOGIT_GINI]
-    labels = ['rejette', 'accepte']
-    nmin_ngram, nmaxngram = 1, 2
+    local_weights = ['AVERAGELocals']
+    global_weights = ['AVERAGEGlobals']
+    pls_types = [PLS_VARIANT.GINI]
+    nmin_ngram, nmaxngram = 1, 1
 
     nu_min = 1.2
     nu_max = 2
@@ -47,8 +46,11 @@ def main(dmd_category, wd):
     for lw, gw, pls_type in itertools.product(local_weights, global_weights, pls_types):
         logger.info("[%s] %d fold crossval for %s*%s, %s-PLS" % (dmd_category, nfolds, lw, gw, pls_type.name))
         for id_fold in range(nfolds):
-            trainfbasename = "%s_cv%d_train_%s%s%d%d" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram)
-            testfbasename = "%s_cv%d_test_%s%s%d%d" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram)
+            #trainfbasename = "%s_cv%d_train_%s%s%d%d" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram)
+            #testfbasename = "%s_cv%d_test_%s%s%d%d" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram)
+            vectors_config = "%s_cv%d_%s%s_%d%dngrams" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram)
+            trainfbasename = '_'.join([vectors_config, 'train'])
+            testfbasename =  '_'.join([vectors_config, 'test'])
             trainfilename = os.path.join(matrices_dir, trainfbasename+".tsv")
             testfilename = os.path.join(matrices_dir, testfbasename+".tsv")
             logger.debug("%s %s" % (trainfilename,  str(os.path.isfile(trainfilename))))
@@ -60,7 +62,8 @@ def main(dmd_category, wd):
             logger.debug("classifierfilename = %s" % classifierfilename)
             # train
             if not os.path.isfile(classifierfilename):
-                train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam)
+                best_nu, best_n_comp = train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range,
+                                 n_components_range, hyperparams_nfolds, crossval_hyperparam)
             # apply
             apply_on_vectors(trainfilename, classifierfilename, trainpredfilename, label_col, index_col, col_sep)
             logger.info("APPLIED ON TRAIN DATA : F1 = %.3f, Accurracy = %.3f" % (
@@ -76,7 +79,8 @@ def main(dmd_category, wd):
 
 if __name__ == "__main__":
     # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data\taj-sens-resultat
-    demand_category = sys.argv[1] if len(ys.argv) > 1 else 'acpa'
+    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa C:\Users\gtngompe\Documents\taj\chap4\wd\litige-motifs-dispositif_lemma\4folds
+    demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     # logger = init_logging(log_file='.'.join([datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),demand_category, 'log']), append=False)
     main(demand_category, wd)

@@ -8,10 +8,10 @@ from sklearn.metrics import f1_score, recall_score, precision_score
 def main(dmd_category, wd):
     nfolds = 4
     predictions_dir = os.path.join(wd, 'predictions')
-    local_weights = ['tf']
-    global_weights = ['chi2', 'idf']
-    pls_types = [PLS_VARIANT.LOGIT_GINI]
-    nmin_ngram, nmaxngram = 1, 2
+    local_weights = ['AVERAGELocals']
+    global_weights = ['AVERAGEGlobals']
+    pls_types = [PLS_VARIANT.GINI]
+    nmin_ngram, nmaxngram = 1, 1
     ytrue_col = 'y_true'
     ypred_col = 'y_pred'
     index_col = 'docId'
@@ -25,8 +25,11 @@ def main(dmd_category, wd):
             ids = list()
             #print("[ %s ]" % datasplit)
             for id_fold in range(nfolds):
-                fbasename = "%s_cv%d_%s_%s%s%d%d" % (dmd_category, id_fold, datasplit, lw, gw, nmin_ngram, nmaxngram)
+                #fbasename = "%s_cv%d_%s_%s%s%d%d" % (dmd_category, id_fold, datasplit, lw, gw, nmin_ngram, nmaxngram)
+                fbasename = vectors_config = "%s_cv%d_%s%s_%d%dngrams_%s" % (dmd_category, id_fold, lw, gw, nmin_ngram, nmaxngram, datasplit)
                 predfilename = os.path.join(predictions_dir, fbasename + '-%s.tsv' % str(pls_type.name).lower())
+                #print(predfilename)
+                assert os.path.isfile(predfilename)
                 fold_ids, fold_ytrue, fold_ypred = load_ytrue_ypred_file(predfilename, indexCol=index_col, yTrueCol=ytrue_col, yPredCol=ypred_col, col_sep=col_sep)
                 ytrue += fold_ytrue
                 ypred += fold_ypred
@@ -41,7 +44,8 @@ def main(dmd_category, wd):
 
 
 if __name__ == "__main__":
-    # python -m ginipls.experiments.eval_taj_sens_resultat acpa data/taj-sens-resultat
+    # python -m ginipls.experiments.cv_eval_taj_sens_resultat acpa data/taj-sens-resultat
+    # python -m ginipls.experiments.cv_eval_taj_sens_resultat acpa C:\Users\gtngompe\Documents\taj\chap4\wd\litige-motifs-dispositif_lemma\4folds
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     main(demand_category, wd)

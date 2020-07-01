@@ -42,7 +42,7 @@ def init_and_train_pls(X_train, y_train, pls_type, hyerparameters_selection_nfol
   gpls.fit(X_train, y_train)
   train_score = gpls.score(X_train, y_train)
   logger.info("train f1_score = %.3f" % (train_score))
-  return gpls
+  return gpls, best_nu, best_n_comp
 
 def train_on_vectors(trainfilename, classifierfilename, label_col, index_col, col_sep, pls_type, nu_range, n_components_range, hyperparams_nfolds, crossval_hyperparam):
     """python -m ginipls train on-vectors --label_col=category --index_col=@id --crossval_hyperparam  data\processed\doris0_CHI2_ATF-train.tsv"""
@@ -51,7 +51,7 @@ def train_on_vectors(trainfilename, classifierfilename, label_col, index_col, co
     if not isinstance(n_components_range[0], int):
         n_components_range = [int(x) for x in cast_click_list(n_components_range)]
     X_train, y_train, headers, ids = load_data(data=trainfilename, output_col=label_col, index_col=index_col, col_sep=col_sep)
-    clf = init_and_train_pls(X_train, y_train, pls_type, hyperparams_nfolds, nu_range, n_components_range, only_the_first_fold=not crossval_hyperparam)
+    clf, best_nu, best_n_comp = init_and_train_pls(X_train, y_train, pls_type, hyperparams_nfolds, nu_range, n_components_range, only_the_first_fold=not crossval_hyperparam)
     if classifierfilename is None:
         # build a name for the model_file
         input_basename = os.path.basename(trainfilename).split('.')[0]
@@ -60,6 +60,7 @@ def train_on_vectors(trainfilename, classifierfilename, label_col, index_col, co
         classifierfilename = os.path.join(DEFAULT_MODELS_DIR,"_".join([datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),input_basename, str(pls_type.name)+"PLS.model"]))
     pickle.dump(clf, open(classifierfilename, 'wb'))
     logger.info("The trained classifier is saved at %s" % (classifierfilename))
+    return best_nu, best_n_comp
 
 def apply_on_vectors(vectorsfilename, classifierfilename, outputfilename, label_col, index_col, col_sep):
     """python -m ginipls apply on-vectors --label_col=category --index_col=@id data\processed\doris0_CHI2_ATF-test.tsv models\2020-06-11_14-58-50_doris0_CHI2_ATF-train_GINIPLS.model"""
