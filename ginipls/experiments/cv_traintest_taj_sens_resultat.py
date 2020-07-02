@@ -18,19 +18,19 @@ def main(dmd_category, wd):
     os.makedirs(models_dir, exist_ok=True)
     predictions_dir = os.path.join(wd, 'predictions')
     os.makedirs(predictions_dir, exist_ok=True)
-    local_weights = ['AVERAGELocals']
-    global_weights = ['AVERAGEGlobals']
-    pls_types = [PLS_VARIANT.GINI]
-    nmin_ngram, nmaxngram = 1, 1
+    local_weights = ['TF']
+    global_weights = ['IDF']
+    pls_types = [PLS_VARIANT.LOGIT_GINI]
+    nmin_ngram, nmaxngram = 2, 1
 
-    nu_min = 1.2
-    nu_max = 2
+    nu_min = 1.3
+    nu_max = 3
     nu_step = 0.1
     nu_range = [i * nu_step for i in range(int(nu_min / nu_step), int(nu_max / nu_step))]
     #nu_range = [1.3]
 
     n_components_min = 1
-    n_components_max = 5  # nb de caractéristiques
+    n_components_max = 3  # nb de caractéristiques
     n_components_step = 1
     n_components_range = range(n_components_min, n_components_max, n_components_step)
     #n_components_range = [2]
@@ -79,7 +79,7 @@ def main(dmd_category, wd):
 
 if __name__ == "__main__":
     # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data\taj-sens-resultat
-    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa C:\Users\gtngompe\Documents\taj\chap4\wd\litige-motifs-dispositif_lemma\4folds
+    # python -m ginipls.experiments.cv_traintest_taj_sens_resultat acpa data\lmd_lemma
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     # logger = init_logging(log_file='.'.join([datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),demand_category, 'log']), append=False)
