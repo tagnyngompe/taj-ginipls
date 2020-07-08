@@ -8,8 +8,8 @@ from sklearn.metrics import f1_score, recall_score, precision_score
 def main(dmd_category, wd):
     nfolds = 4
     predictions_dir = os.path.join(wd, 'predictions')
-    local_weights = ['TF']
-    global_weights = ['IDF']
+    local_weights = ['TF'] # AVERAGELocals # TF
+    global_weights = ['IDF'] # AVERAGEGlobals # IDF
     pls_types = [PLS_VARIANT.LOGIT_GINI]
     nmin_ngram, nmaxngram = 2, 1
     ytrue_col = 'y_true'
@@ -39,13 +39,13 @@ def main(dmd_category, wd):
             r = recall_score(ytrue, ypred, average='macro')
             p = precision_score(ytrue, ypred, average='macro')
             errors = [float('%.3f' % (1 - x)) for x in recall_score(y_true=ytrue, y_pred=ypred, average=None)]
-            print("%s, vecteurs=%s%s, %sPLS, %s, rappel_score_macro = %.3f, precision_score_macro = %.3f, f1_score_macro = %.3f, erreurs = %s" %
+            print("%s, vecteurs=%s%s, %sPLS, %s, rappel_score_macro = %.3f, precision_score_macro = %.3f, f1_score_macro = %.3f, erreurs = %s\n" %
                   (dmd_category, lw, gw, pls_type.name, datasplit, r,p,f1, str(errors)) )
 
 
 if __name__ == "__main__":
     # python -m ginipls.experiments.cv_eval_taj_sens_resultat acpa data/taj-sens-resultat
-    # python -m ginipls.experiments.cv_eval_taj_sens_resultat acpa data\lmd_lemma
+    # python -m ginipls.experiments.cv_eval_taj_sens_resultat acpa data/lmd_lemma
     demand_category = sys.argv[1] if len(sys.argv) > 1 else 'acpa'
     wd = sys.argv[2] if len(sys.argv) > 2 else 'data/taj-sens-resultat'  # working dir
     main(demand_category, wd)
