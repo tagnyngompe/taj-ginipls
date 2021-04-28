@@ -3,12 +3,8 @@ import pandas as pd, numpy, sys
 from time import time
 import os.path as op
 
-sys.path.insert(0, '../data')
-sys.path.insert(1, '../models')
-sys.path.insert(2, '.')
-
-import api
-
+#from ginipls.experiments import api
+from ginipls.experiments import api_with_hyperparameters as api
 
 def learn_transformation(transformation, X_train, y_train):
     n_components = min(11, numpy.asarray(X_train).shape[1])+1/2

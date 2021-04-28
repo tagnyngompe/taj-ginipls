@@ -1,0 +1,703 @@
+.
+├── cv-context
+│   ├── acpa_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── acpa-accepte
+│   │       │   └── acpa-rejette
+│   │       └── train
+│   │           ├── acpa-accepte
+│   │           └── acpa-rejette
+│   ├── concdel_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── concdel-accepte
+│   │       │   └── concdel-rejette
+│   │       └── train
+│   │           ├── concdel-accepte
+│   │           └── concdel-rejette
+│   ├── danais_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── danais-accepte
+│   │       │   └── danais-rejette
+│   │       └── train
+│   │           ├── danais-accepte
+│   │           └── danais-rejette
+│   ├── dcppc_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── dcppc-accepte
+│   │       │   └── dcppc-rejette
+│   │       └── train
+│   │           ├── dcppc-accepte
+│   │           └── dcppc-rejette
+│   ├── doris_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── doris-accepte
+│   │       │   └── doris-rejette
+│   │       └── train
+│   │           ├── doris-accepte
+│   │           └── doris-rejette
+│   └── styx_lemma_4_folds_cv
+│       ├── 0
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 1
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 2
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       └── 3
+│           ├── test
+│           │   ├── styx-accepte
+│           │   └── styx-rejette
+│           └── train
+│               ├── styx-accepte
+│               └── styx-rejette
+├── cv-demande_resultat_a_resultat_context
+│   ├── acpa_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── acpa-accepte
+│   │       │   └── acpa-rejette
+│   │       └── train
+│   │           ├── acpa-accepte
+│   │           └── acpa-rejette
+│   ├── concdel_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── concdel-accepte
+│   │       │   └── concdel-rejette
+│   │       └── train
+│   │           ├── concdel-accepte
+│   │           └── concdel-rejette
+│   ├── danais_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── danais-accepte
+│   │       │   └── danais-rejette
+│   │       └── train
+│   │           ├── danais-accepte
+│   │           └── danais-rejette
+│   ├── dcppc_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── dcppc-accepte
+│   │       │   └── dcppc-rejette
+│   │       └── train
+│   │           ├── dcppc-accepte
+│   │           └── dcppc-rejette
+│   ├── doris_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── doris-accepte
+│   │       │   └── doris-rejette
+│   │       └── train
+│   │           ├── doris-accepte
+│   │           └── doris-rejette
+│   └── styx_lemma_4_folds_cv
+│       ├── 0
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 1
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 2
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       └── 3
+│           ├── test
+│           │   ├── styx-accepte
+│           │   └── styx-rejette
+│           └── train
+│               ├── styx-accepte
+│               └── styx-rejette
+├── cv-litige_motifs_dispositif
+│   ├── acpa_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── acpa-accepte
+│   │   │   │   └── acpa-rejette
+│   │   │   └── train
+│   │   │       ├── acpa-accepte
+│   │   │       └── acpa-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── acpa-accepte
+│   │       │   └── acpa-rejette
+│   │       └── train
+│   │           ├── acpa-accepte
+│   │           └── acpa-rejette
+│   ├── concdel_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── concdel-accepte
+│   │   │   │   └── concdel-rejette
+│   │   │   └── train
+│   │   │       ├── concdel-accepte
+│   │   │       └── concdel-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── concdel-accepte
+│   │       │   └── concdel-rejette
+│   │       └── train
+│   │           ├── concdel-accepte
+│   │           └── concdel-rejette
+│   ├── danais_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── danais-accepte
+│   │   │   │   └── danais-rejette
+│   │   │   └── train
+│   │   │       ├── danais-accepte
+│   │   │       └── danais-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── danais-accepte
+│   │       │   └── danais-rejette
+│   │       └── train
+│   │           ├── danais-accepte
+│   │           └── danais-rejette
+│   ├── dcppc_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── dcppc-accepte
+│   │   │   │   └── dcppc-rejette
+│   │   │   └── train
+│   │   │       ├── dcppc-accepte
+│   │   │       └── dcppc-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── dcppc-accepte
+│   │       │   └── dcppc-rejette
+│   │       └── train
+│   │           ├── dcppc-accepte
+│   │           └── dcppc-rejette
+│   ├── doris_lemma_4_folds_cv
+│   │   ├── 0
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 1
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   ├── 2
+│   │   │   ├── test
+│   │   │   │   ├── doris-accepte
+│   │   │   │   └── doris-rejette
+│   │   │   └── train
+│   │   │       ├── doris-accepte
+│   │   │       └── doris-rejette
+│   │   └── 3
+│   │       ├── test
+│   │       │   ├── doris-accepte
+│   │       │   └── doris-rejette
+│   │       └── train
+│   │           ├── doris-accepte
+│   │           └── doris-rejette
+│   └── styx_lemma_4_folds_cv
+│       ├── 0
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 1
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       ├── 2
+│       │   ├── test
+│       │   │   ├── styx-accepte
+│       │   │   └── styx-rejette
+│       │   └── train
+│       │       ├── styx-accepte
+│       │       └── styx-rejette
+│       └── 3
+│           ├── test
+│           │   ├── styx-accepte
+│           │   └── styx-rejette
+│           └── train
+│               ├── styx-accepte
+│               └── styx-rejette
+└── cv-motifs
+    ├── acpa_lemma_4_folds_cv
+    │   ├── 0
+    │   │   ├── test
+    │   │   │   ├── acpa-accepte
+    │   │   │   └── acpa-rejette
+    │   │   └── train
+    │   │       ├── acpa-accepte
+    │   │       └── acpa-rejette
+    │   ├── 1
+    │   │   ├── test
+    │   │   │   ├── acpa-accepte
+    │   │   │   └── acpa-rejette
+    │   │   └── train
+    │   │       ├── acpa-accepte
+    │   │       └── acpa-rejette
+    │   ├── 2
+    │   │   ├── test
+    │   │   │   ├── acpa-accepte
+    │   │   │   └── acpa-rejette
+    │   │   └── train
+    │   │       ├── acpa-accepte
+    │   │       └── acpa-rejette
+    │   └── 3
+    │       ├── test
+    │       │   ├── acpa-accepte
+    │       │   └── acpa-rejette
+    │       └── train
+    │           ├── acpa-accepte
+    │           └── acpa-rejette
+    ├── concdel_lemma_4_folds_cv
+    │   ├── 0
+    │   │   ├── test
+    │   │   │   ├── concdel-accepte
+    │   │   │   └── concdel-rejette
+    │   │   └── train
+    │   │       ├── concdel-accepte
+    │   │       └── concdel-rejette
+    │   ├── 1
+    │   │   ├── test
+    │   │   │   ├── concdel-accepte
+    │   │   │   └── concdel-rejette
+    │   │   └── train
+    │   │       ├── concdel-accepte
+    │   │       └── concdel-rejette
+    │   ├── 2
+    │   │   ├── test
+    │   │   │   ├── concdel-accepte
+    │   │   │   └── concdel-rejette
+    │   │   └── train
+    │   │       ├── concdel-accepte
+    │   │       └── concdel-rejette
+    │   └── 3
+    │       ├── test
+    │       │   ├── concdel-accepte
+    │       │   └── concdel-rejette
+    │       └── train
+    │           ├── concdel-accepte
+    │           └── concdel-rejette
+    ├── danais_lemma_4_folds_cv
+    │   ├── 0
+    │   │   ├── test
+    │   │   │   ├── danais-accepte
+    │   │   │   └── danais-rejette
+    │   │   └── train
+    │   │       ├── danais-accepte
+    │   │       └── danais-rejette
+    │   ├── 1
+    │   │   ├── test
+    │   │   │   ├── danais-accepte
+    │   │   │   └── danais-rejette
+    │   │   └── train
+    │   │       ├── danais-accepte
+    │   │       └── danais-rejette
+    │   ├── 2
+    │   │   ├── test
+    │   │   │   ├── danais-accepte
+    │   │   │   └── danais-rejette
+    │   │   └── train
+    │   │       ├── danais-accepte
+    │   │       └── danais-rejette
+    │   └── 3
+    │       ├── test
+    │       │   ├── danais-accepte
+    │       │   └── danais-rejette
+    │       └── train
+    │           ├── danais-accepte
+    │           └── danais-rejette
+    ├── dcppc_lemma_4_folds_cv
+    │   ├── 0
+    │   │   ├── test
+    │   │   │   ├── dcppc-accepte
+    │   │   │   └── dcppc-rejette
+    │   │   └── train
+    │   │       ├── dcppc-accepte
+    │   │       └── dcppc-rejette
+    │   ├── 1
+    │   │   ├── test
+    │   │   │   ├── dcppc-accepte
+    │   │   │   └── dcppc-rejette
+    │   │   └── train
+    │   │       ├── dcppc-accepte
+    │   │       └── dcppc-rejette
+    │   ├── 2
+    │   │   ├── test
+    │   │   │   ├── dcppc-accepte
+    │   │   │   └── dcppc-rejette
+    │   │   └── train
+    │   │       ├── dcppc-accepte
+    │   │       └── dcppc-rejette
+    │   └── 3
+    │       ├── test
+    │       │   ├── dcppc-accepte
+    │       │   └── dcppc-rejette
+    │       └── train
+    │           ├── dcppc-accepte
+    │           └── dcppc-rejette
+    ├── doris_lemma_4_folds_cv
+    │   ├── 0
+    │   │   ├── test
+    │   │   │   ├── doris-accepte
+    │   │   │   └── doris-rejette
+    │   │   └── train
+    │   │       ├── doris-accepte
+    │   │       └── doris-rejette
+    │   ├── 1
+    │   │   ├── test
+    │   │   │   ├── doris-accepte
+    │   │   │   └── doris-rejette
+    │   │   └── train
+    │   │       ├── doris-accepte
+    │   │       └── doris-rejette
+    │   ├── 2
+    │   │   ├── test
+    │   │   │   ├── doris-accepte
+    │   │   │   └── doris-rejette
+    │   │   └── train
+    │   │       ├── doris-accepte
+    │   │       └── doris-rejette
+    │   └── 3
+    │       ├── test
+    │       │   ├── doris-accepte
+    │       │   └── doris-rejette
+    │       └── train
+    │           ├── doris-accepte
+    │           └── doris-rejette
+    └── styx_lemma_4_folds_cv
+        ├── 0
+        │   ├── test
+        │   │   ├── styx-accepte
+        │   │   └── styx-rejette
+        │   └── train
+        │       ├── styx-accepte
+        │       └── styx-rejette
+        ├── 1
+        │   ├── test
+        │   │   ├── styx-accepte
+        │   │   └── styx-rejette
+        │   └── train
+        │       ├── styx-accepte
+        │       └── styx-rejette
+        ├── 2
+        │   ├── test
+        │   │   ├── styx-accepte
+        │   │   └── styx-rejette
+        │   └── train
+        │       ├── styx-accepte
+        │       └── styx-rejette
+        └── 3
+            ├── test
+            │   ├── styx-accepte
+            │   └── styx-rejette
+            └── train
+                ├── styx-accepte
+                └── styx-rejette
+
+700 directories

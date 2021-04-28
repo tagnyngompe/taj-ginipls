@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys, getopt, time, os
+from ginipls.experiments import api_with_hyperparameters as api, classification
+from ginipls.data import data_utils
 
-from os.path import dirname
-sys.path.append(dirname(__file__)+"/../..")
-
-sys.path.insert(0, '../../data')
-sys.path.insert(1, '../../models')
-sys.path.insert(2, '..')
-
-import api, classification, data_utils
-
-# python evaluation.py -c acpa -o "@sens-resultat" -i "@id" -m ~/Documents/taj/wsp/chap4/data/cv-litige_motifs_dispositif/acpa_lemma_4_folds_cv/wd-3_2-tsv -r ../../../reports/resultats-litige-motifs-dispositif -k 4 -b False -v ~/Documents/taj/wsp/chap4/data/vectorizations.txt
-
+# python -m ginipls.experiments.scripts.evaluation -c acpa -o "@label" -i "@id" -m data/cv-context/wd-3_2-tsv -r reports/cv-context -k 4 -b False -v data/vectorizations.txt
+# python -m ginipls.experiments.scripts.evaluation -c acpa -o "@label" -i "@id" -m data/cv-demande_resultat_a_resultat_context/wd-3_2-tsv -r reports/cv-demande_resultat_a_resultat_context -k 4 -b False -v data/vectorizations.txt
+# python -m ginipls.experiments.scripts.evaluation -c acpa -o "@label" -i "@id" -m data/cv-litige_motifs_dispositif/wd-3_2-tsv -r reports/cv-litige_motifs_dispositif -k 4 -b False -v data/vectorizations.txt
+# python -m ginipls.experiments.scripts.evaluation -c acpa -o "@label" -i "@id" -m data/cv-motifs/wd-3_2-tsv -r reports/cv-motifs -k 4 -b False -v data/vectorizations.txt
 def main(argv):
     usage = """evaluation.py -c <categoryDmd> -o <output_colname> -d <instance_colname> -m <matrixFolderPath> -r <resultFolderPath> -k <nbFolds> -b <balance traindata?> -v <vectorizationsFilePath>\n
     e.g. python evaluation.py -c styx -o "@category" -i "@id" -m styx_lemma_4_folds_cv/3gram_avec_context-tsv -r resultat30052018 -k 4 -b False -v vectorizations.txt"""
@@ -54,18 +49,18 @@ def main(argv):
             instance_colname = arg
 
     print(os.getcwd())
-    classifiers = ['OurGiniPLS']#'linearDA', 'quadraticDA','GaussianNB','KNN','SVM', 'Tree', 'OurStandardPLS', 'OurGiniPLS', 'OurLogitPLS', 'OurGiniLogitPLS', 'SklearnPLSCanonical']
+    classifiers = ['Tree','OurStandardPLS', 'SklearnPLSCanonical'] # 'linearDA', 'quadraticDA','GaussianNB','KNN','SVM', 'Tree', 'OurStandardPLS', 'OurGiniPLS', 'OurLogitPLS', 'OurGiniLogitPLS', 'SklearnPLSCanonical']
     space_transformations = [None]# None, 'OurGiniLogitPLS',  'lsa', 'linearDA', 'quadraticDA', ]
     localTsvDir = os.path.basename(matrixFolderPath)
     if not os.path.exists(resultFolderPath):
         os.makedirs(resultFolderPath)
-    metrics_file_path= resultFolderPath+"/metrics_"+categoryDmd+"_"+str(nrep)+"_folds_cv_"+(localTsvDir.replace("-tsv", ".tsv"))
+    metrics_file_path= resultFolderPath+"/metrics_"+categoryDmd+"_"+str(nrep)+"_folds_cv_"+(localTsvDir)+".tsv"
     predictionFolderPath = os.path.dirname(metrics_file_path)
     if not os.path.exists(predictionFolderPath):
         os.makedirs(predictionFolderPath)
     with open(metrics_file_path, 'w') as metricsf:
         metricsf.write(
-            "categoryDmd\tvectorization\tspace-transf\tclassifier\tacc\tbalanced-acc\terr-0\terr-1\tf1-0\tf1-1\tf1-macro-avg\tnb0\tnb1\n")
+            "categoryDmd\tvectorization\tspace-transf\tclassifier\tacc\tbalanced-acc\terr-0\terr-1\tf1-0\tf1-1\tf1-macro-avg\tmcc\tnb0\tnb1\n")
         metricsf.close()
     nb_processed_config = 0
     t1 = time.time()
@@ -77,6 +72,7 @@ def main(argv):
                 continue
             for space_transformation in space_transformations:
                 for classifier in classifiers:
+                    print("Train test with %s on %s "% (classifier, vectorization))
                     nb_processed_config +=1
                     config = categoryDmd + "_" + vectorization + "_" + str(space_transformation) + "_" + classifier
                     acc = 0
@@ -88,6 +84,7 @@ def main(argv):
                     f1_0 = 0
                     f1_1 = 0
                     f1_macro = 0
+                    mcc = 0 # matthews_corrcoef
                     t1cv = time.time()
                     for k in range(nrep):
                         prediction_file_path = os.path.join(resultFolderPath, "predictions", config + "_" + str(k) + "_" + localTsvDir + ".tsv")
@@ -97,7 +94,8 @@ def main(argv):
                             predictionFolderPath = os.path.dirname(prediction_file_path)
                             if not os.path.exists(predictionFolderPath):
                                 os.makedirs(predictionFolderPath)
-                            data_base_name = categoryDmd+"-rejette_vs_"+categoryDmd+"-accepte-"+str(k)+"_" + vectorization
+                            #data_base_name = categoryDmd+"-rejette_vs_"+categoryDmd+"-accepte-"+str(k)+"_" + vectorization
+                            data_base_name = "%s_cv%d_%s" % (categoryDmd, k, vectorization)
                             #config = categoryDmd+"-accepte_vs_"+categoryDmd+"-rejette-"+str(k)+"_" + gw + "_" + lw
                             train_data = os.path.join(matrixFolderPath, data_base_name + "_train.tsv")
                             if not os.path.exists(train_data):
@@ -116,15 +114,15 @@ def main(argv):
                                     data=test_data, output_col=output_colname,
                                     index_col=instance_colname, col_sep="\t", header_row_num=0)
                             y_test_pred = classification.train(classifier, X_train, y_train).predict(X_test)
-                            data_utils.save_data2(ids_test, y_test, y_test_pred, prediction_file_path)
+                            data_utils.save_ytrue_and_ypred_in_file(ids_test, y_test, y_test_pred, prediction_file_path)
                         # else:
                         #     print(".")
-                        docIds, y_true, y_pred = data_utils.load_evaluation_data2(prediction_file_path)
+                        docIds, y_true, y_pred = data_utils.load_ytrue_ypred_file(prediction_file_path)
                         #print(y_true,y_pred)
                         nb_0_k = len([y for y in y_true if y == 0])
                         nb_0 += nb_0_k
                         nb_1 += len(y_true) - nb_0_k
-                        acc_k, b_acc_k, err_0_k, err_1_k, f1_0_k, f1_1_k, f1_macro_k = api.evaluation(y_true, y_pred)
+                        acc_k, b_acc_k, err_0_k, err_1_k, f1_0_k, f1_1_k, f1_macro_k, mcc_k = api.evaluation(y_true, y_pred)
                         acc += acc_k
                         b_acc += b_acc_k
                         err_0 += err_0_k
@@ -132,6 +130,7 @@ def main(argv):
                         f1_0 += f1_0_k
                         f1_1 += f1_1_k
                         f1_macro += f1_macro_k
+                        mcc += mcc_k
                     if nb_processed_config % 50 == 0:
                         print(nb_processed_config, "configs processed in ", (time.time() - t1), "sec")
                         t1 = time.time()
@@ -139,9 +138,8 @@ def main(argv):
                         metricsf.write(
                             config.replace("_", "\t") + "\t" + str(acc / nrep) + "\t" + str(b_acc / nrep) + "\t" + str(
                                 err_0 / nrep) + "\t" + str(err_1 / nrep) + "\t" + str(f1_0 / nrep) + "\t" + str(
-                                f1_1 / nrep) + "\t" + str(f1_macro / nrep) + "\t" + str(nb_0) + "\t" + str(nb_1) + "\n")
+                                f1_1 / nrep) + "\t" + str(f1_macro / nrep) + "\t" + str(mcc / nrep) + "\t" + str(nb_0) + "\t" + str(nb_1) + "\n")
                         metricsf.close()
-
 
 
 if __name__ == "__main__":

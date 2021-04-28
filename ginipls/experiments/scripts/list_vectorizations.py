@@ -1,9 +1,12 @@
-localWeights = ['TP', 'TF', 'LOGTF', 'ATF', 'LOGAVE']
-globalWeights = ['CHI2', 'DBIDF', 'DELTADF', 'DSIDF', 'GSS', 'IDF', 'IG', 'KLD', 'MARASCUILO', 'NGL', 'RF'] 
+# generate the content for vectorizations.txt
+
+
+localWeights = ['TP', 'TF', 'LOGTF', 'ATF', 'LOGAVE', 'AVERAGELocals']
+globalWeights = ['CHI2', 'DBIDF', 'DELTADF', 'DSIDF', 'GSS', 'IDF', 'IG', 'KLD', 'MARASCUILO', 'NGL', 'RF', 'AVERAGEGlobals']
 
 for gw in globalWeights:
     for lw in localWeights:
-        print(gw+"*"+lw)
+        print(lw+gw)
 
 
 #print("max*embbedings")

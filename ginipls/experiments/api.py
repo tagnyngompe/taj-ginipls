@@ -1,16 +1,15 @@
 # encoding: utf-8
 #from __future__ import absolute_import, division, print_function
 import numpy as np
-import pandas as pd
 from sklearn.cross_decomposition import PLSCanonical, PLSRegression
+from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
 from scipy.stats import randint as sp_randint
 import random
 from time import time
-import sys
 
-
-from ginipls.models.ginipls import PLS_VARIANT
+from ginipls.data.data_utils import load_ytrue_ypred_file
+from ginipls.models.ginipls import PLS, PLS_VARIANT
 
 class PLSCanonical(PLSCanonical):
     def __init__(self, n_components=2, scale=True, algorithm="nipals",
@@ -120,16 +119,16 @@ def reportBestMetaparameters(results, n_top=3):
             print("")
 
 def report_besthyperpara(results_search_hyperpara, param_min_to_select_name):
-    best_candidates = np.flatnonzero(results['rank_test_score'] == 1)
+    best_candidates = np.flatnonzero(results_search_hyperpara['rank_test_score'] == 1)
     best_candidate = 0
     if param_min_to_select_name != None:
-        min_ = results['params'][0][param_min_to_select_name]
+        min_ = results_search_hyperpara['params'][0][param_min_to_select_name]
         for candidate in best_candidates:
-            current_val = results['params'][candidate][param_min_to_select_name]
+            current_val = results_search_hyperpara['params'][candidate][param_min_to_select_name]
             if current_val < min_:
                 min_ = current_val
                 best_candidate = candidate
-    best_metaparameters = results['params'][best_candidate]
+    best_metaparameters = results_search_hyperpara['params'][best_candidate]
     print("api.linearDA_train.best_metaparameters", best_metaparameters)
     return best_metaparameters
 
@@ -182,7 +181,7 @@ def our_logit_gini_pls_train(X_train, y_train, n_components=default_n_components
 def __our_pls_train(X_train, y_train, pls_type, n_components=default_n_components,
                     nu=default_nu, centering_reduce=True, use_VIP=use_VIP):
     #import ginipls
-    clf = ginipls.PLS(pls_type, n_components, nu, centering_reduce,use_VIP=use_VIP)
+    clf = PLS(pls_type, n_components, nu, centering_reduce,use_VIP=use_VIP)
     clf.fit(X_train, y_train)    
     return clf
 
@@ -207,34 +206,36 @@ def linearDA_train(X_train, y_train):
     from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
     clf = LinearDiscriminantAnalysis()
     # MODEL SELECTION: specify meta-parameters and distributions to sample from
-    num_attributes = np.asmatrix(X_train).shape[1]
+    n_features = np.asmatrix(X_train).shape[1]
+    n_classes = len(set(y_train))
     #print("api.linearDA_train.num_attributes", num_attributes)
-    param_dist = {"solver": ["svd", "lsqr"],#, "eigen"],
-                  #"shrinkage": [None, "auto"],
-                  "n_components": sp_randint(2, num_attributes/2.0)
-                  }
-    ## run randomized search
-    n_iter_search = 20
-    random_search = RandomizedSearchCV(clf, param_distributions=param_dist,
-                                       n_iter=n_iter_search, cv=3)
-    random_search.fit(X_train, y_train)
-    #reportBestMetaparameters(random_search.cv_results_, 1)
-    results = random_search.cv_results_
-    best_candidates = np.flatnonzero(results['rank_test_score'] == 1)
-    best_candidate = 0
-    min_n_components = results['params'][0]["n_components"]
-    for candidate in best_candidates:
-        n_components = results['params'][candidate]["n_components"]
-        if n_components < min_n_components:
-            min_n_components = n_components
-            best_candidate = candidate
-    best_metaparameters = results['params'][best_candidate]
-    print("api.linearDA_train.best_metaparameters", best_metaparameters)
-    # init the model with the best metaparameters
-    clf = LinearDiscriminantAnalysis(
-        solver=best_metaparameters["solver"],
-    #shrinkage=best_metaparameters["shrinkage"],
-    n_components=best_metaparameters["n_components"])
+    # param_dist = {"solver": ["svd", "lsqr"],#, "eigen"],
+    #               #"shrinkage": [None, "auto"],
+    #               "n_components": [min(10, n_features, n_classes-1)]
+    #               }
+    # ## run randomized search
+    # n_iter_search = 20
+    # random_search = RandomizedSearchCV(clf, param_distributions=param_dist,
+    #                                    n_iter=n_iter_search, cv=3)
+    # random_search.fit(X_train, y_train)
+    # #reportBestMetaparameters(random_search.cv_results_, 1)
+    # results = random_search.cv_results_
+    # best_candidates = np.flatnonzero(results['rank_test_score'] == 1)
+    # best_candidate = 0
+    # min_n_components = results['params'][0]["n_components"]
+    # for candidate in best_candidates:
+    #     n_components = results['params'][candidate]["n_components"]
+    #     if n_components < min_n_components:
+    #         min_n_components = n_components
+    #         best_candidate = candidate
+    # best_metaparameters = results['params'][best_candidate]
+    # print("api.linearDA_train.best_metaparameters", best_metaparameters)
+    # # init the model with the best metaparameters
+    # clf = LinearDiscriminantAnalysis(
+    #     solver=best_metaparameters["solver"],
+    # #shrinkage=best_metaparameters["shrinkage"],
+    # n_components=best_metaparameters["n_components"])
+    clf = LinearDiscriminantAnalysis()
     clf.fit(X_train, y_train)
     return clf
     
@@ -243,15 +244,15 @@ def quadraticDA_train(X_train, y_train):
     http://www.science.smith.edu/~jcrouser/SDS293/labs/lab5-py.html
     """
     from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis     
-    clf = QuadraticDiscriminantAnalysis()
     # MODEL SELECTION: specify meta-parameters and distributions to sample from
-    param_dist = {"reg_param": [random.uniform(0,1) for i in range(1000000)]}
-
-    best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
-    print("api.quadraticDA_train.best_metaparameters", best_metaparameters)
+    # clf = QuadraticDiscriminantAnalysis()
+    # param_dist = {"reg_param": [random.uniform(0,1) for i in range(1000000)]}
+    # best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
+    # print("api.quadraticDA_train.best_metaparameters", best_metaparameters)
     # init the model with the best metaparameters
-    clf = QuadraticDiscriminantAnalysis(reg_param=best_metaparameters["reg_param"])
-    clf.fit(X_train, y_train)    
+    #clf = QuadraticDiscriminantAnalysis(reg_param=best_metaparameters["reg_param"])
+    clf = QuadraticDiscriminantAnalysis()
+    clf.fit(X_train, y_train)
     return clf
     
 def naivebayes_train(X_train, y_train):
@@ -262,74 +263,79 @@ def naivebayes_train(X_train, y_train):
 
 def knn_train(X_train, y_train, nb_neighbors=1): 
     from sklearn import neighbors
-    clf = neighbors.KNeighborsClassifier()
-    num_instances = np.asmatrix(X_train).shape[0]
-    param_dist = {
-        "n_neighbors": sp_randint(2, num_instances/2.0),
-        "weights": ['uniform', 'distance'],
-        "algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
-        "leaf_size": sp_randint(2, num_instances/2.0),
-        "metric": ['euclidean', 'manhattan', 'chebyshev']
-    }
-    best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
-    clf = neighbors.KNeighborsClassifier(
-        n_neighbors=best_metaparameters["n_neighbors"],
-        weights=best_metaparameters["weights"],
-        algorithm=best_metaparameters["algorithm"],
-        leaf_size=best_metaparameters["leaf_size"],
-        metric=best_metaparameters["metric"]
-    )
+    # MODEL SELECTION:
+    # clf = neighbors.KNeighborsClassifier()
+    # num_instances = np.asmatrix(X_train).shape[0]
+    # param_dist = {
+    #     "n_neighbors": sp_randint(2, num_instances/2.0),
+    #     "weights": ['uniform', 'distance'],
+    #     "algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
+    #     "leaf_size": sp_randint(2, num_instances/2.0),
+    #     "metric": ['euclidean', 'manhattan', 'chebyshev']
+    # }
+    # best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
+    # clf = neighbors.KNeighborsClassifier(
+    #     n_neighbors=best_metaparameters["n_neighbors"],
+    #     weights=best_metaparameters["weights"],
+    #     algorithm=best_metaparameters["algorithm"],
+    #     leaf_size=best_metaparameters["leaf_size"],
+    #     metric=best_metaparameters["metric"]
+    # )
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5)
     clf.fit(X_train, y_train)
     return clf
 
 
 def svm_train(X_train, y_train):
     from sklearn import svm
+    # MODEL SELECTION:
+    # clf = svm.SVC()
+    # param_dist = {
+    #     "C": [random.uniform(0,100) for i in range(100000)] + [0.1, 0.5, 1],
+    #     "kernel": ['linear', 'poly', 'rbf', 'sigmoid'],
+    #     "degree": sp_randint(2, 5),
+    #     "gamma": [random.uniform(0,100) for i in range(100000)] + [0.1, 1, 'scale']
+    # }
+    # best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
+    # clf = svm.SVC(
+    #     C = best_metaparameters['C'],
+    #     kernel = best_metaparameters['kernel'],
+    #     degree = best_metaparameters['degree'],
+    #     gamma = best_metaparameters['gamma']
+    # )
     clf = svm.SVC()
-    param_dist = {
-        "C": [random.uniform(0,100) for i in range(100000)] + [0.1, 0.5, 1],
-        "kernel": ['linear', 'poly', 'rbf', 'sigmoid'],
-        "degree": sp_randint(2, 5),
-        "gamma": [random.uniform(0,100) for i in range(100000)] + [0.1, 1, 'scale']
-    }
-    best_metaparameters = run_randomsearch(clf, param_dist, X_train, y_train, k_cv=4)
-    clf = svm.SVC(
-        C = best_metaparameters['C'],
-        kernel = best_metaparameters['kernel'],
-        degree = best_metaparameters['degree'],
-        gamma = best_metaparameters['gamma']
-    )
     clf.fit(X_train, y_train) # simple np.array pas une matrice      
     return clf
 
 
 def decision_tree_train(X_train, y_train):
     from sklearn.tree import DecisionTreeClassifier
-    #clf = DecisionTreeClassifier(criterion='gini', presort=True, random_state=0)
-    clf = DecisionTreeClassifier()
-    num_attributes = np.asmatrix(X_train).shape[1]
-    num_instances = np.asmatrix(X_train).shape[0]
-    param_dist = {
-        "criterion": ['gini', 'entropy'],
-        "splitter": ['best', 'random'],
-          "min_samples_split": [random.uniform(0,1) for i in range(10)],
-          "max_depth":[x for x in range (2, 10)] + [None],
-          "min_samples_leaf": [x for x in range (1, num_instances)],
-          "max_leaf_nodes": [x for x in range (2, num_instances)] + [None],
-        "max_features": [random.uniform(0,1) for i in range(10)] + ['auto', 'sqrt', 'log2', None],
-        "class_weight": ['balanced', None]
-    }
-    best_metaparameters = run_gridsearch(clf, param_dist, X_train, y_train, k_cv=4)
-    clf = DecisionTreeClassifier(
-        criterion=best_metaparameters['criterion'],
-        splitter=best_metaparameters['splitter'],
-        min_samples_split=best_metaparameters['min_samples_split'],
-        max_depth=best_metaparameters['max_depth'],
-        min_samples_leaf=best_metaparameters['min_samples_leaf'],
-        max_leaf_nodes=best_metaparameters['max_leaf_nodes'],
-        max_features=best_metaparameters['max_features'],
-        class_weight=best_metaparameters['class_weight']
-    )
+    # MODEL SELECTION:
+    # clf = DecisionTreeClassifier()
+    # num_attributes = np.asmatrix(X_train).shape[1]
+    # num_instances = np.asmatrix(X_train).shape[0]
+    # param_dist = {
+    #     "criterion": ['gini', 'entropy'],
+    #     "splitter": ['best', 'random'],
+    #       "min_samples_split": [random.uniform(0,1) for i in range(10)],
+    #       "max_depth":[x for x in range (2, 10)] + [None],
+    #       "min_samples_leaf": [x for x in range (1, num_instances)],
+    #       "max_leaf_nodes": [x for x in range (2, num_instances)] + [None],
+    #     "max_features": [random.uniform(0,1) for i in range(10)] + ['auto', 'sqrt', 'log2', None],
+    #     "class_weight": ['balanced', None]
+    # }
+    # best_metaparameters = run_gridsearch(clf, param_dist, X_train, y_train, k_cv=4)
+    # clf = DecisionTreeClassifier(
+    #     criterion=best_metaparameters['criterion'],
+    #     splitter=best_metaparameters['splitter'],
+    #     min_samples_split=best_metaparameters['min_samples_split'],
+    #     max_depth=best_metaparameters['max_depth'],
+    #     min_samples_leaf=best_metaparameters['min_samples_leaf'],
+    #     max_leaf_nodes=best_metaparameters['max_leaf_nodes'],
+    #     max_features=best_metaparameters['max_features'],
+    #     class_weight=best_metaparameters['class_weight']
+    # )
+    clf = DecisionTreeClassifier(criterion='gini')
 
     clf = clf.fit(X_train, y_train) # simple np.array pas une matrice
     return clf
@@ -369,6 +375,7 @@ def evaluation(y_true, y_pred):
     categories = list(set(y_true))
     #print("api.evaluation.categories", categories)
     f1_scores = [x for x in f1_score(y_true=y_true, y_pred=y_pred, labels=categories, average=None)]
+    f1_macro_avg = f1_score(y_true=y_true, y_pred=y_pred, labels=categories, average="macro")
     # if len(errors) == 1:
     #     print("errors", errors)
     #     if(y_true[0] < 1):
@@ -376,7 +383,8 @@ def evaluation(y_true, y_pred):
     #     else :
     #         errors = [0] + errors
     # print("errors", errors)
-    return [acc, b_acc]+errors+f1_scores+[f1_score(y_true=y_true, y_pred=y_pred, labels=categories, average="macro")]
+    mcc = matthews_corrcoef(y_true, y_pred)
+    return [acc, b_acc]+errors+f1_scores+[f1_macro_avg, mcc]
     #print(cohen_kappa_score(y1=expected, y2=predicted))
     #print(confusion_matrix(y_true=expected, y_pred=predicted))
     #print(classification_report(y_true=expected, y_pred=predicted, digits=3)) 
@@ -399,3 +407,9 @@ def run_all_classifiers(X_train, y_train, X_test, y_test):
     print(y_p)
     print('\tDecisionTreeClassifier:', evaluation(y_test, y_p))
     print('\tDecisionTreeClassifier:', evaluation(y_test, decision_tree_train(X_train, y_train).predict(X_test)))
+
+if __name__ == "__main__":
+    _, ytrue, ypred = load_ytrue_ypred_file("C:\\Users\\gtngompe\\GitHub\\taj-ginipls\\reports\\cv-context\\predictions\\acpa_ATFCHI2_None_OurGiniPLS_0_wd-1_1-tsv.tsv")
+    print("ytrue", ytrue)
+    print("ypred", ypred)
+    print("MCC", matthews_corrcoef(ytrue, ypred))
